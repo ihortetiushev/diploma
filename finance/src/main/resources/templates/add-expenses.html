@@ -1,0 +1,26 @@
+<form action="#" th:action="@{/add-expenses}" th:object="${expenses}" method="post">
+  <label for="description">Description</label>
+  <input type="text" th:field="*{description}" id="description" placeholder="Description">
+  <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+
+  <label for="category">Category</label>
+  <select th:field="*{category}" id="category">
+      <option value="" disabled selected>-- Select a Category --</option>
+      <option value="Продукти">Продукти</option>
+      <option value="Транспорт">Транспорт</option>
+      <option value="Здоров'я">Здоров'я</option>
+      <option value="Оренда житла">Оренда житла</option>
+      <option value="Одяг">Одяг</option>
+      <option value="Інше">Інше</option>
+  </select>
+  <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
+
+  <label for="amount">Amount</label>
+  <input type="number" th:field="*{amount}" id="amount" placeholder="Amount">
+  <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+
+  <label for="operationDate">Date</label>
+  <input type="date" th:field="*{operationDate}" id="operationDate" placeholder="Operation Date">
+  <span th:if="${#fields.hasErrors('operationDate')}" th:errors="*{operationDate}"></span>
+  <input type="submit" value="Add Expenses">
+</form>
