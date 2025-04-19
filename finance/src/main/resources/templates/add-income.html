@@ -5,12 +5,8 @@
 
     <label for="category">Category</label>
     <select th:field="*{category}" id="category">
-        <option value="" disabled selected>-- Select a Category --</option>
-        <option value="Заробітна плата">Заробітна плата</option>
-        <option value="Премії">Премії</option>
-        <option value="Фріланс">Фріланс</option>
-        <option value="Інвестиції">Інвестиції</option>
-        <option value="Інше">Інше</option>
+        <option value="-1">-- Select a Category --</option>
+        <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}">
     </select>
     <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
 

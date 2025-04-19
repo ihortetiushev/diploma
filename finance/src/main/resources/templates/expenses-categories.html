@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Income Categories</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+    <script th:src="@{/js/categories.js}" type="text/javascript"></script>
+</head>
+<body>
+
+<div id="add-dialog" title="Add Expenses Category" style="display:none">
+    <form action="#" th:action="@{/add-expenses-category}" th:object="${expensesCategory}" method="post">
+        <label for="add-name">Name</label>
+        <input type="text" th:field="*{name}" id="add-name" placeholder="Name">
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        <input type="submit" value="Add">
+    </form>
+</div>
+
+<div id="edit-dialog" title="Edit Expenses Category" style="display:none">
+    <form action="#" th:action="@{/update-expenses-category}" th:object="${expensesCategory}" method="post">
+        <input type="hidden" th:field="*{id}" id="edit-id">
+        <label for="edit-name">Name</label>
+        <input type="text" th:field="*{name}" id="edit-name" placeholder="Name">
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        <input type="submit" value="Save">
+    </form>
+</div>
+
+<div id="dialog-confirm" title="Delete Expenses Category?" style="display:none">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Category will be deleted and cannot be recovered. Are you sure?</p>
+</div>
+
+<h2>Expenses Categories</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Category Name</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${categories.empty}">
+        <td colspan="3">No data</td>
+    </tr>
+    <tr th:each="category : ${categories}">
+        <td><span th:text="${category.name}">Name </span></td>
+        <td><button th:onclick="showEditDialog([[${category.id}]], [[${category.name}]])">Edit</button></td>
+        <td><button th:onclick="showDeleteDialog('delete-expenses-category', [[${category.id}]])">Delete</button></span></td>
+    </tr>
+    </tbody>
+</table>
+<button onclick="showAddDialog()">Add Category</button>

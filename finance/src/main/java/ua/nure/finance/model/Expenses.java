@@ -1,9 +1,6 @@
 package ua.nure.finance.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +10,7 @@ import java.time.LocalDate;
 
 @Entity
 @Valid
-public class Expenses {
+public class Expenses implements CategorizedAmount {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -27,7 +24,9 @@ public class Expenses {
     private LocalDate operationDate;
 
     @NotBlank(message = "Category is mandatory")
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private ExpensesCategory category;
 
 
     public long getId() {
@@ -36,6 +35,11 @@ public class Expenses {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Override
+    public String getCategoryName() {
+        return getCategory().getName();
     }
 
     public BigDecimal getAmount() {
@@ -61,8 +65,12 @@ public class Expenses {
     public void setOperationDate(LocalDate operationDate) {
         this.operationDate = operationDate;
     }
-    public String getCategory() {
+
+    public ExpensesCategory getCategory() {
         return category;
     }
 
+    public void setCategory(ExpensesCategory category) {
+        this.category = category;
+    }
 }

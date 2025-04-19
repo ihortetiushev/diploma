@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Balance</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
     <link th:href="@{/css/index.css}" rel="stylesheet"/>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script th:inline="javascript">
         let chartData = [[${chartData}]];
+        let activeButton = [[${activeButton}]];
     </script>
     <script th:src="@{/js/index.js}" type="text/javascript"></script>
 </head>
@@ -22,43 +26,21 @@
     </div>
 
     <div class="navigation">
-        <button class="active">Витрати</button>
-        <button>Доходи</button>
-        <button>Категорії</button>
-        <button>Статистика</button>
+        <button id='expenses-button' onclick="expenses()">Витрати</button>
+        <button id='income-button' onclick="income()">Доходи</button>
+        <button id='categories-button' onclick="categories()">Категорії</button>
+        <button id='statistics-button' onclick="statistics()">Статистика</button>
     </div>
 
     <div id="chart_div"></div>
 
     <div class="records-section">
-        <div th:switch="${incomes}">
-            <h2 th:case="null">No income records!</h2>
-            <div th:case="*" class="income-records">
-                <div class="record-category">
-                    <h3>Продукти</h3>
-                    <span th:text="${totalProducts} + ' ₴'">___ ₴</span>
-                </div>
-                <div class="record-category">
-                    <h3>Транспорт</h3>
-                    <span th:text="${totalTransport} + ' ₴'">___ ₴</span>
-                </div>
-            </div>
-        </div>
-
-        <div th:switch="${expenses}">
-            <h2 th:case="null">No expense records!</h2>
-            <div th:case="*" class="expense-records">
-                <div class="record-category">
-                    <h3>Одяг</h3>
-                    <span th:text="${totalClothing} + ' ₴'">___ ₴</span>
-                </div>
-                <div class="record-category">
-                    <h3>Оренда житла</h3>
-                    <span th:text="${totalRent} + ' ₴'">___ ₴</span>
-                </div>
-                <div class="record-category">
-                    <h3>Здоров'я</h3>
-                    <span th:text="${totalHealth} + ' ₴'">___ ₴</span>
+        <div th:switch="${totalByCategory}">
+            <h2 th:case="null">No data</h2>
+            <div th:case="*">
+                <div class="record-category" th:each="byCategory : ${totalByCategory}">
+                    <h3 th:text="${byCategory.key}"/>
+                    <span th:text="${byCategory.value} + ' ₴'">___ ₴</span>
                 </div>
             </div>
         </div>
