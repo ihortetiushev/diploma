@@ -23,20 +23,10 @@ $( document ).ready(function() {
 });
 
 function expenses() {
-     $('#expenses-button').addClass('active')
-
-     $('#income-button').removeClass('active')
-     $('#categories-button').removeClass('active')
-     $('#statistics-button').removeClass('active')
      window.location.href='/'
 }
 
 function income() {
-     $('#income-button').addClass('active')
-
-     $('#expenses-button').removeClass('active')
-     $('#categories-button').removeClass('active')
-     $('#statistics-button').removeClass('active')
      window.location.href='/income'
 }
 
