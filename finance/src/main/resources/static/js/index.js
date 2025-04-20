@@ -22,8 +22,9 @@ $( document ).ready(function() {
     }
 });
 
-function expenses() {
-     window.location.href='/'
+function setFormAction(action) {
+     //$('#searchForm').action = action;
+     document.getElementById('searchForm').action = action;
 }
 
 function income() {

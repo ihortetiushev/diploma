@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Valid
 public class Expenses implements CategorizedAmount {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull(message = "Amount is mandatory")

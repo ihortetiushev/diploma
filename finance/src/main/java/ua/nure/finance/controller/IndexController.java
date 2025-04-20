@@ -1,14 +1,17 @@
 package ua.nure.finance.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ua.nure.finance.model.CategorizedAmount;
 import ua.nure.finance.reposotory.ExpensesRepository;
 import ua.nure.finance.reposotory.IncomeRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,17 +27,32 @@ public class IndexController {
         this.expensesRepository = expensesRepository;
     }
 
-    @GetMapping("/") //Expenses is the default data
+    @GetMapping("/")
     public String getExpenses(Model model) {
-        prepareModel(expensesRepository.findAll(), model);
-        model.addAttribute("activeButton","expenses-button");
+        //prepareModel(expensesRepository.findAll(), model);
+        //model.addAttribute("activeButton", "expenses-button");
+        return "index";
+    }
+
+    @GetMapping("/expenses")
+    public String getExpenses(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                              @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                              Model model) {
+        prepareModel(expensesRepository.findByOperationDateBetween(startDate, endDate), model);
+        model.addAttribute("activeButton", "expenses-button");
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
         return "index";
     }
 
     @GetMapping("/income")
-    public String getIncome(Model model) {
+    public String getIncome(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                            Model model) {
         prepareModel(incomeRepository.findAll(), model);
-        model.addAttribute("activeButton","income-button");
+        model.addAttribute("activeButton", "income-button");
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
         return "index";
     }
 
@@ -59,7 +77,7 @@ public class IndexController {
 
     private List<List<Object>> getChartData(Map<String, BigDecimal> totalsByCategory) {
         List<List<Object>> chartData = new ArrayList<>();
-        for(Map.Entry<String, BigDecimal> entry: totalsByCategory.entrySet()) {
+        for (Map.Entry<String, BigDecimal> entry : totalsByCategory.entrySet()) {
             List<Object> dataList = new ArrayList<>();
             dataList.add(entry.getKey());
             dataList.add(entry.getValue());

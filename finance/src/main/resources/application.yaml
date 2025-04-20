@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: finance
+
+  flyway: #flyway automatically uses the datasource from the application to connect to the DB
+    enabled: true # enables flyway database migration
+    locations: classpath:db/migration/structure, classpath:db/migration/data # the location where flyway should look for migration scripts
+    validate-on-migrate: true
+    default-schema: finance
+
+  jpa:
+    defer-datasource-initialization: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/finance
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
