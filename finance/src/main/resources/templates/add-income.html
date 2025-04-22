@@ -11,8 +11,17 @@
     <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
 
     <label for="amount">Amount</label>
-    <input type="number" th:field="*{amount}" id="amount" placeholder="Amount">
+    <input type="number"
+           id="amount"
+           name="amount"
+           step="0.01"
+           th:value="${amount}" />
     <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+
+    <label for="currency">Currency</label>
+    <select th:field="*{currency}" id="currency">
+        <option th:each="currency : ${currencies}" th:text="${currency.currencyCode}" th:value="${currency.currencyCode}">
+    </select>
 
     <label for="operationDate">Date</label>
     <input type="date" th:field="*{operationDate}" id="operationDate" placeholder="Operation Date">

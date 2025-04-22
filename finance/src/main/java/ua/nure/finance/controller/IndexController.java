@@ -27,22 +27,10 @@ public class IndexController {
         this.expensesRepository = expensesRepository;
     }
 
-    @GetMapping("/")
-    public String getExpenses(Model model) {
-        //prepareModel(expensesRepository.findAll(), model);
-        //model.addAttribute("activeButton", "expenses-button");
-        return "index";
-    }
 
-    @GetMapping("/expenses")
-    public String getExpenses(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                              @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                              Model model) {
-        prepareModel(expensesRepository.findByOperationDateBetween(startDate, endDate), model);
-        model.addAttribute("activeButton", "expenses-button");
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
-        return "index";
+    @GetMapping("/main")
+    public String dashboard(Model model) {
+        return "main";
     }
 
     @GetMapping("/income")
@@ -50,10 +38,10 @@ public class IndexController {
                             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                             Model model) {
         prepareModel(incomeRepository.findAll(), model);
-        model.addAttribute("activeButton", "income-button");
+        model.addAttribute("mode", "income");
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
-        return "index";
+        return "income";
     }
 
     private void prepareModel(Iterable<? extends CategorizedAmount> data, Model model) {

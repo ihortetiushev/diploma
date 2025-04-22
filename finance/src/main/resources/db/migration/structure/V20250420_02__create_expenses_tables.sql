@@ -1,6 +1,6 @@
 CREATE TABLE expenses_category (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE expenses (

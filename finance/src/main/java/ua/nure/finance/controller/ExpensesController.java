@@ -1,33 +1,47 @@
 package ua.nure.finance.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import ua.nure.finance.model.CategorizedAmount;
+import ua.nure.finance.model.Currency;
 import ua.nure.finance.model.Expenses;
 import ua.nure.finance.model.ExpensesCategory;
-import ua.nure.finance.model.IncomeCategory;
+import ua.nure.finance.reposotory.CurrencyRepository;
 import ua.nure.finance.reposotory.ExpensesCategoryRepository;
 import ua.nure.finance.reposotory.ExpensesRepository;
-import ua.nure.finance.reposotory.IncomeCategoryRepository;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ExpensesController {
-    private final ExpensesRepository expensesRepository;
-    private final ExpensesCategoryRepository expensesCategoryRepository;
-
-    public ExpensesController(ExpensesRepository expensesRepository, ExpensesCategoryRepository expensesCategoryRepository) {
-        this.expensesRepository = expensesRepository;
-        this.expensesCategoryRepository = expensesCategoryRepository;
-    }
-
+    @Autowired
+    private ExpensesRepository expensesRepository;
+    @Autowired
+    private ExpensesCategoryRepository expensesCategoryRepository;
+    @Autowired
+    private CurrencyRepository currencyRepository;
 
     @GetMapping("/add-expenses")
     public String showAddForm(Expenses expenses, Model model) {
+        Currency defaultCurrency = new Currency();
+        defaultCurrency.setCurrencyCode("UAH");
+        expenses.setCurrency(defaultCurrency);
+        expenses.setOperationDate(LocalDate.now());
         model.addAttribute("categories", expensesCategoryRepository.findAll());
+        model.addAttribute("currencies", currencyRepository.findAll());
         return "add-expenses";
     }
 
@@ -59,7 +73,7 @@ public class ExpensesController {
 
     @PostMapping("/update-expenses-category")
     public String updateExpensesCategory(@Valid ExpensesCategory expensesCategory,
-                                       BindingResult result) {
+                                         BindingResult result) {
         if (result.hasErrors()) {
             return "expenses-categories";
         }
@@ -110,5 +124,57 @@ public class ExpensesController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid expenses Id:" + id));
         expensesRepository.delete(expenses);
         return "redirect:/";
+    }
+
+    @GetMapping("/")
+    public String getExpensesDefaultDates(Model model) {
+        LocalDate today = LocalDate.now();
+        LocalDate firstOfMonth = today.withDayOfMonth(1);
+        return expenses(firstOfMonth, today, model);
+    }
+
+    @GetMapping("/expenses")
+    public String getExpenses(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                              @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                              Model model) {
+        return expenses(startDate, endDate, model);
+    }
+
+    private String expenses( LocalDate startDate, LocalDate endDate, Model model) {
+        prepareModel(expensesRepository.findByOperationDateBetween(startDate, endDate), model);
+        model.addAttribute("mode", "expenses");
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        return "expenses";
+    }
+
+    private void prepareModel(Iterable<? extends CategorizedAmount> data, Model model) {
+        List<CategorizedAmount> dataList = new ArrayList<>();
+        data.forEach(dataList::add);
+        Map<String, BigDecimal> totalsByCategory = getTotalsByCategory(dataList);
+        model.addAttribute("totalByCategory", totalsByCategory);
+        model.addAttribute("chartData", getChartData(totalsByCategory));
+    }
+
+    Map<String, BigDecimal> getTotalsByCategory(List<? extends CategorizedAmount> data) {
+        Map<String, BigDecimal> totals = new HashMap<>();
+        for (CategorizedAmount item : data) {
+            BigDecimal current = totals.get(item.getCategoryName());
+            current = current == null ? new BigDecimal(0) : current;
+            BigDecimal newAmount = current.add(item.getAmount());
+            totals.put(item.getCategoryName(), newAmount);
+        }
+        return totals;
+    }
+
+    private List<List<Object>> getChartData(Map<String, BigDecimal> totalsByCategory) {
+        List<List<Object>> chartData = new ArrayList<>();
+        for (Map.Entry<String, BigDecimal> entry : totalsByCategory.entrySet()) {
+            List<Object> dataList = new ArrayList<>();
+            dataList.add(entry.getKey());
+            dataList.add(entry.getValue());
+            chartData.add(dataList);
+        }
+        return chartData;
     }
 }

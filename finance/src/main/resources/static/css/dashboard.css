@@ -1,0 +1,169 @@
+/* Global styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /*background-color: #12121c;*/
+    color: black;
+}
+
+/* Layout container: sidebar on right */
+.container {
+    display: flex;
+    flex-direction: row-reverse; /* Sidebar on the right */
+    height: 100vh;
+    color: black;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    /*background-color: #1e1e2f;*/
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    color: black;
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+    color: black
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar nav ul li {
+    margin: 10px 0;
+}
+
+.sidebar nav ul li a {
+    color: blue;
+    text-decoration: none;
+    display: block;
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+
+.sidebar nav ul li a:hover {
+   /* background-color: #2a2a40;*/
+}
+
+/* Main dashboard area */
+.dashboard-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Topbar with months and year selector */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.months button {
+    margin-right: 5px;
+    /*padding: 6px 12px;
+    background-color: #2a2a40;*/
+    /*color: #ffffff;
+    border: none;*/
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sidebar nav ul li a.active {
+    font-weight: bold;
+}
+
+.months button:hover {
+    /*background-color: #404060;*/
+}
+
+.topbar select {
+    padding: 6px 10px;
+    /*background-color: #2a2a40;*/
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+}
+
+/* Summary bar */
+.summary-bar {
+    display: flex;
+    justify-content: space-around;
+    /*background-color: #1f1f2f;*/
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.summary-bar div {
+    font-size: 1.1em;
+}
+
+.summary-bar .iae {
+    color: #45ff75;
+    font-weight: bold;
+}
+
+/* Main panel area (three sections) */
+.main-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+/* Panels */
+.panel {
+    /*background-color: #1a1a2b;*/
+    border-radius: 10px;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.panel h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: black;
+}
+
+/* Table panel */
+.table-panel table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-panel th, .table-panel td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #333344;
+}
+
+.table-panel th {
+   /* background-color: #2a2a3f;*/
+    color: #ffffff;
+}
+
+/* Chart panel */
+.chart-panel img {
+    max-width: 100%;
+}
+
+/* Averages panel */
+.averages-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.averages-panel li {
+    padding: 5px 0;
+    border-bottom: 1px solid #2d2d3f;
+}

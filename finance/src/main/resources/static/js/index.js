@@ -7,9 +7,10 @@ function drawChart() {
     data.addColumn('number', 'Slices');
     data.addRows(chartData);
     const options = {
-        title: 'Balance',
-        width: 400,
-        height: 300
+        width: 550,
+        height: 500,
+        is3D :true,
+        backgroundColor: 'transparent'
     };
 
     const chart = new google.visualization.PieChart(document.getElementById('chart_div'));
@@ -17,14 +18,18 @@ function drawChart() {
 }
 
 $( document ).ready(function() {
-    if (activeButton) {
-       $('#'+activeButton).addClass('active')
+    if (mode) {
+       $('#' + mode + '-button').addClass('active')
     }
 });
 
 function setFormAction(action) {
      //$('#searchForm').action = action;
      document.getElementById('searchForm').action = action;
+     if (typeof document.getElementById('searchForm').submit === "object") {
+         document.getElementById('searchForm').submit.remove();
+     }
+     document.getElementById('searchForm').submit();
 }
 
 function income() {

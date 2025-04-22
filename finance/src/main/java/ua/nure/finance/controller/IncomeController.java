@@ -1,32 +1,41 @@
 package ua.nure.finance.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ua.nure.finance.model.Currency;
 import ua.nure.finance.model.Income;
 import ua.nure.finance.model.IncomeCategory;
+import ua.nure.finance.reposotory.CurrencyRepository;
 import ua.nure.finance.reposotory.IncomeCategoryRepository;
 import ua.nure.finance.reposotory.IncomeRepository;
+
+import java.time.LocalDate;
 
 @Controller
 public class IncomeController {
 
-    private final IncomeRepository incomeRepository;
-    private final IncomeCategoryRepository incomeCategoryRepository;
+    @Autowired
+    private IncomeRepository incomeRepository;
+    @Autowired
+    private IncomeCategoryRepository incomeCategoryRepository;
 
-    public IncomeController(IncomeRepository incomeRepository, IncomeCategoryRepository incomeCategoryRepository) {
-        this.incomeRepository = incomeRepository;
-        this.incomeCategoryRepository = incomeCategoryRepository;
-    }
-
+    @Autowired
+    private CurrencyRepository currencyRepository;
 
     @GetMapping("/add-income")
     public String addIncomeForm(Model model, Income income) {
+        Currency defaultCurrency = new Currency();
+        defaultCurrency.setCurrencyCode("UAH");
+        income.setCurrency(defaultCurrency);
+        income.setOperationDate(LocalDate.now());
         model.addAttribute("categories", incomeCategoryRepository.findAll());
+        model.addAttribute("currencies", currencyRepository.findAll());
         return "add-income";
     }
 

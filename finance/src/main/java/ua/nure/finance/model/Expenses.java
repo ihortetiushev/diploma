@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,14 +21,18 @@ public class Expenses implements CategorizedAmount {
     @NotBlank(message = "Description is mandatory")
     private String description;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull(message = "Operation date is mandatory")
     private LocalDate operationDate;
-
     @NotBlank(message = "Category is mandatory")
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private ExpensesCategory category;
 
+    @NotNull(message = "Currency is mandatory")
+    @ManyToOne
+    @JoinColumn(name = "currency_code", referencedColumnName = "currencyCode")
+    private Currency currency;
 
     public long getId() {
         return id;
@@ -72,5 +77,13 @@ public class Expenses implements CategorizedAmount {
 
     public void setCategory(ExpensesCategory category) {
         this.category = category;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 }
