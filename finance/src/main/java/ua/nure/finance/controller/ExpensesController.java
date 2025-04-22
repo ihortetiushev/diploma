@@ -142,7 +142,6 @@ public class ExpensesController {
 
     private String expenses( LocalDate startDate, LocalDate endDate, Model model) {
         prepareModel(expensesRepository.findByOperationDateBetween(startDate, endDate), model);
-        model.addAttribute("mode", "expenses");
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         return "expenses";

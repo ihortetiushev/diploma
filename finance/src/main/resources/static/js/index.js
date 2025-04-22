@@ -17,14 +17,7 @@ function drawChart() {
     chart.draw(data, options);
 }
 
-$( document ).ready(function() {
-    if (mode) {
-       $('#' + mode + '-button').addClass('active')
-    }
-});
-
 function setFormAction(action) {
-     //$('#searchForm').action = action;
      document.getElementById('searchForm').action = action;
      if (typeof document.getElementById('searchForm').submit === "object") {
          document.getElementById('searchForm').submit.remove();
@@ -32,8 +25,12 @@ function setFormAction(action) {
      document.getElementById('searchForm').submit();
 }
 
-function income() {
-     window.location.href='/income'
+function incomeCategories() {
+     window.location.href='/income-categories'
+}
+
+function expensesCategories() {
+     window.location.href='/expenses-categories'
 }
 
 function statistics() {

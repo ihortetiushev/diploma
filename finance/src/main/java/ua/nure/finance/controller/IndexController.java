@@ -38,7 +38,6 @@ public class IndexController {
                             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                             Model model) {
         prepareModel(incomeRepository.findAll(), model);
-        model.addAttribute("mode", "income");
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         return "income";

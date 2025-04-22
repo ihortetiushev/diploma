@@ -22,8 +22,8 @@
         <h3>Персональні фінанси</h3>
         <nav>
             <ul>
-                <li><a href="#" onclick="setFormAction('/expenses')" th:classappend="${mode == 'expenses'} ? 'active'">Витрати</a></li>
-                <li><a href="#" onclick="setFormAction('/income')" th:classappend="${mode == 'income'} ? 'active'">Доходи</a></li>
+                <li><a href="#" onclick="setFormAction('/expenses')">Витрати</a></li>
+                <li><a href="#" onclick="setFormAction('/income')" class="active">Доходи</a></li>
                 <li><a href="#" >Активи</a></li>
                 <li><a href="#" >Налаштування</a></li>
             </ul>
@@ -77,7 +77,16 @@
                 </div>
             </div>
         </section>
+        <footer class="footer">
+            <div class="footer-content">
+                <nav class="footer-links">
+                    <button>Додати дохід</button>
+                    <button onclick="incomeCategories()">Категорії</button>
+                </nav>
+            </div>
+        </footer>
     </main>
+
 </div>
 
 </body>
