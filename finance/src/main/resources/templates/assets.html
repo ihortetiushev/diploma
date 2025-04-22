@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Assets</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+    <link th:href="@{/css/index.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="container">
+    <aside class="sidebar">
+        <h3>Персональні фінанси</h3>
+        <nav>
+            <ul>
+                <li><a href="/">Витрати</a></li>
+                <li><a href="/income">Доходи</a></li>
+                <li><a href="/assets" class="active">Активи</a></li>
+                <li><a href="#">Налаштування</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+
+    <main class="dashboard-content">
+        <header class="topbar">
+            <form id="assetsForm" method="get">
+
+            </form>
+        </header>
+
+
+        <section class="main-panels">
+
+            <div class="panel chart-panel">
+
+            </div>
+
+        </section>
+        <footer class="footer">
+            <div class="footer-content">
+                <nav class="footer-links">
+                    <a href="/add-asset" class="btn btn-outline-secondary">Додати актив</a>
+                    <a href="/assets-categories" class="btn btn-outline-secondary">Категорії</a>
+                </nav>
+            </div>
+        </footer>
+    </main>
+</div>
+</body>
+</html>

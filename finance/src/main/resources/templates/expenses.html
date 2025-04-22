@@ -13,7 +13,6 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script th:inline="javascript">
         let chartData = [[${chartData}]];
-        let mode = [[${mode}]];
     </script>
     <script th:src="@{/js/index.js}" type="text/javascript"></script>
 </head>
@@ -26,7 +25,7 @@
             <ul>
                 <li><a href="#" onclick="setFormAction('/expenses')" class="active">Витрати</a></li>
                 <li><a href="#" onclick="setFormAction('/income')">Доходи</a></li>
-                <li><a href="#" >Активи</a></li>
+                <li><a href="/assets">Активи</a></li>
                 <li><a href="#" >Налаштування</a></li>
             </ul>
         </nav>
