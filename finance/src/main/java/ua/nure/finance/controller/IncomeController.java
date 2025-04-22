@@ -2,12 +2,15 @@ package ua.nure.finance.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import ua.nure.finance.model.CategorizedAmount;
 import ua.nure.finance.model.Currency;
 import ua.nure.finance.model.Income;
 import ua.nure.finance.model.IncomeCategory;
@@ -15,10 +18,15 @@ import ua.nure.finance.reposotory.CurrencyRepository;
 import ua.nure.finance.reposotory.IncomeCategoryRepository;
 import ua.nure.finance.reposotory.IncomeRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
-public class IncomeController {
+public class IncomeController extends BaseController{
 
     @Autowired
     private IncomeRepository incomeRepository;
@@ -118,5 +126,15 @@ public class IncomeController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid income category Id:" + id));
         incomeCategoryRepository.delete(incomeCategory);
         return "redirect:/income-categories";
+    }
+
+    @GetMapping("/income")
+    public String getIncome(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                            Model model) {
+        prepareModel(incomeRepository.findAll(), model);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        return "income";
     }
 }
