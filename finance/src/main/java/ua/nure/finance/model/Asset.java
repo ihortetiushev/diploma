@@ -1,6 +1,7 @@
 package ua.nure.finance.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,8 +20,10 @@ public class Asset {
     @Column(name = "current_value", precision = 19, scale = 2)
     private BigDecimal currentValue;
 
-    @Column(name = "currency_code", length = 3, nullable = false)
-    private String currencyCode;
+    @NotNull(message = "Currency is mandatory")
+    @ManyToOne
+    @JoinColumn(name = "currency_code", referencedColumnName = "currencyCode")
+    private Currency currency;
 
     @Column(name = "last_valuated_date")
     private LocalDate lastValuatedDate;
@@ -69,12 +72,12 @@ public class Asset {
         this.currentValue = currentValue;
     }
 
-    public String getCurrencyCode() {
-        return currencyCode;
+    public Currency getCurrencyCode() {
+        return currency;
     }
 
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public LocalDate getLastValuatedDate() {
