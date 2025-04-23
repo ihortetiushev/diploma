@@ -72,7 +72,7 @@ public class Asset {
         this.currentValue = currentValue;
     }
 
-    public Currency getCurrencyCode() {
+    public Currency getCurrency() {
         return currency;
     }
 
