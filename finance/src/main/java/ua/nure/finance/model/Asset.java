@@ -28,6 +28,8 @@ public class Asset {
     @Column(name = "last_valuated_date")
     private LocalDate lastValuatedDate;
 
+    @Column(nullable = false, length = 50)
+    private String name;
     @Column(nullable = false, length = 255)
     private String description;
 
@@ -120,4 +122,11 @@ public class Asset {
         this.status = status;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
