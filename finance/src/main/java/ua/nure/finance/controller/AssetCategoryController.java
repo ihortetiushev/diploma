@@ -3,18 +3,18 @@ package ua.nure.finance.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ua.nure.finance.model.AssetsCategory;
-import ua.nure.finance.reposotory.AssetsCategoryRepository;
+import ua.nure.finance.model.AssetCategory;
+import ua.nure.finance.reposotory.AssetCategoryRepository;
 
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/assets-categories")
-public class AssetsCategoryController {
+public class AssetCategoryController {
 
-    private final AssetsCategoryRepository categoryRepository;
+    private final AssetCategoryRepository categoryRepository;
 
-    public AssetsCategoryController(AssetsCategoryRepository categoryRepository) {
+    public AssetCategoryController(AssetCategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
@@ -22,13 +22,13 @@ public class AssetsCategoryController {
     @GetMapping
     public String listCategories(Model model) {
         model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("category", new AssetsCategory()); // for add form
+        model.addAttribute("category", new AssetCategory()); // for add form
         return "assets-category"; // Thymeleaf template name
     }
 
     // Save or update category
     @PostMapping("/save")
-    public String saveCategory(@ModelAttribute AssetsCategory category) {
+    public String saveCategory(@ModelAttribute AssetCategory category) {
         categoryRepository.save(category);
         return "redirect:/assets-categories";
     }
@@ -36,11 +36,11 @@ public class AssetsCategoryController {
     // Edit category (populate form)
     @GetMapping("/edit/{id}")
     public String editCategory(@PathVariable Long id, Model model) {
-        Optional<AssetsCategory> category = categoryRepository.findById(id);
+        Optional<AssetCategory> category = categoryRepository.findById(id);
         if (category.isPresent()) {
             model.addAttribute("category", category.get());
         } else {
-            model.addAttribute("category", new AssetsCategory());
+            model.addAttribute("category", new AssetCategory());
         }
         model.addAttribute("categories", categoryRepository.findAll());
         return "assets-category";

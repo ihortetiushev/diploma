@@ -35,7 +35,7 @@ public class Asset {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
-    private AssetsCategory category;
+    private AssetCategory category;
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
@@ -98,11 +98,11 @@ public class Asset {
         this.description = description;
     }
 
-    public AssetsCategory getCategory() {
+    public AssetCategory getCategory() {
         return category;
     }
 
-    public void setCategory(AssetsCategory category) {
+    public void setCategory(AssetCategory category) {
         this.category = category;
     }
 

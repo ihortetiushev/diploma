@@ -14,13 +14,21 @@
     <input type="text" th:field="*{description}" id="description" placeholder="Description">
     <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
 
-    <label for="initialValue">Amount</label>
+    <label for="initialValue">Initial Amount</label>
     <input type="number"
            id="initialValue"
            name="initialValue"
            step="0.01"
            th:value="${initialValue}" />
     <span th:if="${#fields.hasErrors('initialValue')}" th:errors="*{initialValue}"></span>
+
+    <label for="currentValue">Current Amount</label>
+    <input type="number"
+           id="currentValue"
+           name="currentValue"
+           step="0.01"
+           th:value="${currentValue}" />
+    <span th:if="${#fields.hasErrors('currentValue')}" th:errors="*{currentValue}"></span>
 
     <label for="currency">Currency</label>
     <select th:field="*{currency}" id="currency">

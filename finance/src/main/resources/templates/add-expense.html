@@ -1,7 +1,10 @@
-<form action="#" th:action="@{/add-expenses}" th:object="${expenses}" method="post">
-    <label for="description">Description</label>
-    <input type="text" th:field="*{description}" id="description" placeholder="Description">
-    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+<form action="#" th:action="@{/add-expense}" th:object="${expense}" method="post">
+
+    <label for="asset">Asset</label>
+    <select th:field="*{asset}" id="asset">
+        <option value="-1">-- Select Asset --</option>
+        <option th:each="asset : ${assets}" th:value="${asset.id}" th:text="${asset.name}">
+    </select>
 
     <label for="category">Category</label>
     <select th:field="*{category}" id="category">
@@ -26,5 +29,10 @@
     <label for="operationDate">Date</label>
     <input type="date" th:field="*{operationDate}" id="operationDate" placeholder="Operation Date">
     <span th:if="${#fields.hasErrors('operationDate')}" th:errors="*{operationDate}"></span>
-    <input type="submit" value="Add Expenses">
+
+    <label for="description">Description</label>
+    <input type="text" th:field="*{description}" id="description" placeholder="Description">
+    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+
+    <input type="submit" value="Add Expense">
 </form>

@@ -11,8 +11,8 @@
 </head>
 <body>
 
-<div id="add-dialog" title="Add Expenses Category" style="display:none">
-    <form action="#" th:action="@{/add-expenses-category}" th:object="${expensesCategory}" method="post">
+<div id="add-dialog" title="Add Expense Category" style="display:none">
+    <form action="#" th:action="@{/add-expenses-category}" th:object="${expenseCategory}" method="post">
         <label for="add-name">Name</label>
         <input type="text" th:field="*{name}" id="add-name" placeholder="Name">
         <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
@@ -20,8 +20,8 @@
     </form>
 </div>
 
-<div id="edit-dialog" title="Edit Expenses Category" style="display:none">
-    <form action="#" th:action="@{/update-expenses-category}" th:object="${expensesCategory}" method="post">
+<div id="edit-dialog" title="Edit Expense Category" style="display:none">
+    <form action="#" th:action="@{/update-expenses-category}" th:object="${expenseCategory}" method="post">
         <input type="hidden" th:field="*{id}" id="edit-id">
         <label for="edit-name">Name</label>
         <input type="text" th:field="*{name}" id="edit-name" placeholder="Name">
@@ -30,11 +30,11 @@
     </form>
 </div>
 
-<div id="dialog-confirm" title="Delete Expenses Category?" style="display:none">
+<div id="dialog-confirm" title="Delete Expense Category?" style="display:none">
     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Category will be deleted and cannot be recovered. Are you sure?</p>
 </div>
 
-<h2>Expenses Categories</h2>
+<h2>Expense Categories</h2>
 <table>
     <thead>
     <tr>

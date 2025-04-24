@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.nure.finance.model.Currency;
 import ua.nure.finance.model.Income;
 import ua.nure.finance.model.IncomeCategory;
+import ua.nure.finance.reposotory.AssetRepository;
 import ua.nure.finance.reposotory.CurrencyRepository;
 import ua.nure.finance.reposotory.IncomeCategoryRepository;
 import ua.nure.finance.reposotory.IncomeRepository;
+import ua.nure.finance.service.IncomeService;
 
 import java.time.LocalDate;
 
@@ -26,9 +28,12 @@ public class IncomeController extends BaseController {
     private IncomeRepository incomeRepository;
     @Autowired
     private IncomeCategoryRepository incomeCategoryRepository;
-
     @Autowired
     private CurrencyRepository currencyRepository;
+    @Autowired
+    private AssetRepository assetRepository;
+    @Autowired
+    private IncomeService incomeService;
 
     @GetMapping("/add-income")
     public String addIncomeForm(Model model, Income income) {
@@ -37,6 +42,7 @@ public class IncomeController extends BaseController {
         income.setCurrency(defaultCurrency);
         income.setOperationDate(LocalDate.now());
         model.addAttribute("categories", incomeCategoryRepository.findAll());
+        model.addAttribute("assets", assetRepository.findAll());
         model.addAttribute("currencies", currencyRepository.findAll());
         return "add-income";
     }
@@ -63,8 +69,8 @@ public class IncomeController extends BaseController {
             return "add-income";
         }
 
-        incomeRepository.save(income);
-        return "redirect:/";
+        incomeService.saveIncome(income);
+        return "redirect:/income";
     }
 
     @GetMapping("/edit-income/{id}")

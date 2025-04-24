@@ -11,7 +11,8 @@ import java.time.LocalDate;
 
 @Entity
 @Valid
-public class Expenses implements CategorizedAmount {
+@Table(name = "expenses")
+public class Expense implements CategorizedAmount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -27,7 +28,11 @@ public class Expenses implements CategorizedAmount {
     @NotBlank(message = "Category is mandatory")
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private ExpensesCategory category;
+    private ExpenseCategory category;
+
+    @ManyToOne
+    @JoinColumn(name = "asset_id", referencedColumnName = "id")
+    private Asset asset;
 
     @NotNull(message = "Currency is mandatory")
     @ManyToOne
@@ -71,11 +76,11 @@ public class Expenses implements CategorizedAmount {
         this.operationDate = operationDate;
     }
 
-    public ExpensesCategory getCategory() {
+    public ExpenseCategory getCategory() {
         return category;
     }
 
-    public void setCategory(ExpensesCategory category) {
+    public void setCategory(ExpenseCategory category) {
         this.category = category;
     }
 
@@ -85,5 +90,13 @@ public class Expenses implements CategorizedAmount {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 }

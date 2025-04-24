@@ -35,6 +35,10 @@ public class Income implements CategorizedAmount {
     @JoinColumn(name = "currency_code", referencedColumnName = "currencyCode")
     private Currency currency;
 
+    @ManyToOne
+    @JoinColumn(name = "asset_id", referencedColumnName = "id")
+    private Asset asset;
+
     public long getId() {
         return id;
     }
@@ -86,5 +90,13 @@ public class Income implements CategorizedAmount {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 }

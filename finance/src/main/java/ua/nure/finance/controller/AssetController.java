@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ua.nure.finance.model.Asset;
 import ua.nure.finance.model.Currency;
 import ua.nure.finance.reposotory.AssetRepository;
-import ua.nure.finance.reposotory.AssetsCategoryRepository;
+import ua.nure.finance.reposotory.AssetCategoryRepository;
 import ua.nure.finance.reposotory.CurrencyRepository;
 
 @Controller
 @RequestMapping("/assets")
-public class AssetsController {
+public class AssetController {
 
     @Autowired
-    private AssetsCategoryRepository categoryRepository;
+    private AssetCategoryRepository categoryRepository;
     @Autowired
     private AssetRepository assetRepository;
     @Autowired
