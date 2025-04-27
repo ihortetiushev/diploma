@@ -4,6 +4,9 @@ body {
     padding: 20px;
     background: #e3f7dd;
 }
+body, html {
+    overflow-x: hidden;
+}
 
 .balance-container {
     max-width: 800px;
@@ -125,8 +128,8 @@ h1 {
 
 .sidebar {
     border-left: 3px solid black;
-    padding-left: 25px;
-    margin-right: -180px;
+    padding-left: 12px;
+    margin-right: -160px;
 }
 .sidebar h3 {
     font-size: calc(0.9rem + .6vw);
@@ -142,6 +145,7 @@ h1 {
     text-decoration: none;
     display: block;
     padding: 10px 15px;
+    padding-left: 0;
     border-radius: 8px;
     transition: background-color 0.2s ease-in-out;
 }
