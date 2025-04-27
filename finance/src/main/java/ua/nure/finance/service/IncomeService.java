@@ -3,8 +3,8 @@ package ua.nure.finance.service;
 import org.springframework.stereotype.Service;
 import ua.nure.finance.model.Asset;
 import ua.nure.finance.model.Income;
-import ua.nure.finance.reposotory.AssetRepository;
-import ua.nure.finance.reposotory.IncomeRepository;
+import ua.nure.finance.repository.AssetRepository;
+import ua.nure.finance.repository.IncomeRepository;
 
 @Service
 public class IncomeService {

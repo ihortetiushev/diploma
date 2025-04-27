@@ -14,6 +14,7 @@
         let chartData = [[${chartData}]];
     </script>
     <script th:src="@{/js/index.js}" type="text/javascript"></script>
+    <script th:src="@{/js/common.js}" type="text/javascript"></script>
 </head>
 <body>
 
@@ -25,6 +26,7 @@
                 <li><a href="#" onclick="setFormAction('/expenses')">Витрати</a></li>
                 <li><a href="#" onclick="setFormAction('/income')" class="active">Доходи</a></li>
                 <li><a href="/assets">Активи</a></li>
+                <li><a href="#" onclick="setFormAction('/transactions')">Журнал транзакцій</a></li>
                 <li><a href="#" >Налаштування</a></li>
             </ul>
         </nav>

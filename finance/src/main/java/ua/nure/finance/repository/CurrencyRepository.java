@@ -1,4 +1,4 @@
-package ua.nure.finance.reposotory;
+package ua.nure.finance.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

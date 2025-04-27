@@ -10,6 +10,7 @@
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
     <link th:href="@{/css/index.css}" rel="stylesheet"/>
+    <script th:src="@{/js/common.js}" type="text/javascript"></script>
 </head>
 <body>
 
@@ -21,6 +22,7 @@
                 <li><a href="/">Витрати</a></li>
                 <li><a href="/income">Доходи</a></li>
                 <li><a href="/assets" class="active">Активи</a></li>
+                <li><a href="/transactions">Журнал транзакцій</a></li>
                 <li><a href="#">Налаштування</a></li>
             </ul>
         </nav>
@@ -35,31 +37,83 @@
 
         <section class="main-panels">
             <div>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Name</th>
-                        <th>Currency</th>
-                        <th>Initial Value</th>
-                        <th>Current Value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:if="${assets.empty}">
-                        <td colspan="3">No data</td>
-                    </tr>
-                    <tr th:each="asset : ${assets}">
-                        <td><span th:text="${asset.category.name}"></span></td>
-                        <td><span th:text="${asset.name}"></span></td>
-                        <td><span th:text="${asset.currency.currencyCode}"></span></td>
-                        <td><span th:text="${asset.initialValue}"></span></td>
-                        <td><span th:text="${asset.currentValue}"></span></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+                <form method="get" th:action="@{/assets}">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <!-- Headers with sorting links -->
+                            <th>
+                                <a th:href="@{/assets(sort='category.name', direction=${sort == 'category.name' and direction == 'asc' ? 'desc' : 'asc'}, categoryFilter=${categoryFilter}, nameFilter=${nameFilter}, currencyFilter=${currencyFilter})}">
+                                    Category
+                                    <span th:if="${sort == 'category.name'}"
+                                          th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
+                                </a>
+                            </th>
+                            <th>
+                                <a th:href="@{/assets(sort='name', direction=${sort == 'name' and direction == 'asc' ? 'desc' : 'asc'}, categoryFilter=${categoryFilter}, nameFilter=${nameFilter}, currencyFilter=${currencyFilter})}">
+                                    Name
+                                    <span th:if="${sort == 'name'}" th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
+                                </a>
+                            </th>
+                            <th>
+                                <a th:href="@{/assets(sort='currency.currencyCode', direction=${sort == 'currency.currencyCode' and direction == 'asc' ? 'desc' : 'asc'}, categoryFilter=${categoryFilter}, nameFilter=${nameFilter}, currencyFilter=${currencyFilter})}">
+                                    Currency
+                                    <span th:if="${sort == 'currency.currencyCode'}"
+                                          th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
+                                </a>
+                            </th>
+                            <th>
+                                <a th:href="@{/assets(sort='initialValue', direction=${sort == 'initialValue' and direction == 'asc' ? 'desc' : 'asc'}, categoryFilter=${categoryFilter}, nameFilter=${nameFilter}, currencyFilter=${currencyFilter})}">
+                                    Initial Value
+                                    <span th:if="${sort == 'initialValue'}"
+                                          th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
+                                </a>
+                            </th>
+                            <th>
+                                <a th:href="@{/assets(sort='currentValue', direction=${sort == 'currentValue' and direction == 'asc' ? 'desc' : 'asc'}, categoryFilter=${categoryFilter}, nameFilter=${nameFilter}, currencyFilter=${currencyFilter})}">
+                                    Current Value
+                                    <span th:if="${sort == 'currentValue'}"
+                                          th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
+                                </a>
+                            </th>
+                        </tr>
 
+                        <tr>
+                            <!-- Filter inputs only for Category, Name, Currency -->
+                            <th>
+                                <input class="form-control form-control-sm" type="text" name="categoryFilter"
+                                       placeholder="Filter Category" th:value="${categoryFilter}">
+                            </th>
+                            <th>
+                                <input class="form-control form-control-sm" type="text" name="nameFilter"
+                                       placeholder="Filter Name" th:value="${nameFilter}">
+                            </th>
+                            <th>
+                                <input class="form-control form-control-sm" type="text" name="currencyFilter"
+                                       placeholder="Filter Currency" th:value="${currencyFilter}">
+                            </th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+
+
+                        <tbody>
+                        <tr th:if="${assets.empty}">
+                            <td colspan="5">No data</td>
+                        </tr>
+                        <tr th:each="asset : ${assets}">
+                            <td><span th:text="${asset.category.name}"></span></td>
+                            <td><span th:text="${asset.name}"></span></td>
+                            <td><span th:text="${asset.currency.currencyCode}"></span></td>
+                            <td><span th:text="${asset.initialValue}"></span></td>
+                            <td><span th:text="${asset.currentValue}"></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button type="submit" style="display:none"></button>
+                </form>
+            </div>
         </section>
         <footer class="footer">
             <div class="footer-content">

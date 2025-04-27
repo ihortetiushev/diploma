@@ -1,8 +1,7 @@
-package ua.nure.finance.reposotory;
+package ua.nure.finance.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import ua.nure.finance.model.Income;
 import ua.nure.finance.model.IncomeCategory;
 
 @Repository
