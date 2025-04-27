@@ -5,3 +5,13 @@ function setFormAction(action) {
      }
      document.getElementById('searchForm').submit();
 }
+
+function cleanEmptyFieldsAndSubmit(form) {
+    const inputs = form.querySelectorAll("input, select");
+    inputs.forEach(input => {
+        if (input.value.trim() === '') {
+            input.removeAttribute('name');
+        }
+    });
+    form.submit();
+}

@@ -9,15 +9,16 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Immutable
-@Table(name = "transaction_view") // Name of your view
 @Getter
 @Setter
+@Immutable
+@Table(name = "transaction_view")
+@IdClass(TransactionViewId.class)
 public class TransactionView {
 
     @Id
     private Long id;
-
+    @Id
     private String type; // "INCOME" or "EXPENSE"
 
     @Column(name = "operation_date")
@@ -29,8 +30,9 @@ public class TransactionView {
 
     private String currency;
 
-    @Column(name = "asset_id")
-    private Long assetId;
+    @ManyToOne
+    @JoinColumn(name = "asset_id", referencedColumnName = "id")
+    private Asset asset;
 
     private String description;
 
