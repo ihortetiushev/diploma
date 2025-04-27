@@ -17,11 +17,11 @@ body {
 /* Sidebar styles */
 .sidebar {
     width: 250px;
-    /*background-color: #1e1e2f;*/
     padding: 20px;
     display: flex;
     flex-direction: column;
     color: black;
+    overflow-y: auto;
 }
 
 .sidebar h2 {
@@ -127,11 +127,19 @@ body {
     padding: 15px;
     overflow-y: auto;
 }
+.panel h1 {
+    font-size: 20px;
+    padding-right: 61px;
+    margin-left: 45px;
+    margin-bottom: 0px;
+    color: black;
+}
 
 .panel h3 {
     margin-top: 0;
     margin-bottom: 10px;
     color: black;
+    font-size: 25px;
 }
 
 /* Table panel */
@@ -161,6 +169,7 @@ body {
     list-style: none;
     padding: 0;
     margin: 0;
+    /*font-size: 20px;*/
 }
 
 .averages-panel li {

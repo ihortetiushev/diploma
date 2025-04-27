@@ -7,8 +7,8 @@ function drawChart() {
     data.addColumn('number', 'Slices');
     data.addRows(chartData);
     const options = {
-        width: 450,
-        height: 450,
+        width: 500,
+        height: 500,
         is3D :true,
         backgroundColor: 'transparent'
     };

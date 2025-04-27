@@ -70,7 +70,7 @@
                     <div th:case="*">
                         <div class="record-category" th:each="byCategory : ${totalByCategory}">
                             <h1 th:text="${byCategory.key}"/>
-                            <h1 th:text="${byCategory.value} + ' ₴'">___ ₴</h1>
+                            <h1 th:text="${byCategory.value} + ' UAH'">___ ₴</h1>
                         </div>
                     </div>
                 </div>
