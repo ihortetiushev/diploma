@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -11,6 +13,8 @@ import java.time.LocalDate;
 
 @Entity
 @Valid
+@Getter
+@Setter
 @Table(name = "expenses")
 public class Expense implements CategorizedAmount {
     @Id
@@ -52,51 +56,4 @@ public class Expense implements CategorizedAmount {
         return getCategory().getName();
     }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getOperationDate() {
-        return operationDate;
-    }
-
-    public void setOperationDate(LocalDate operationDate) {
-        this.operationDate = operationDate;
-    }
-
-    public ExpenseCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(ExpenseCategory category) {
-        this.category = category;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    public Asset getAsset() {
-        return asset;
-    }
-
-    public void setAsset(Asset asset) {
-        this.asset = asset;
-    }
 }

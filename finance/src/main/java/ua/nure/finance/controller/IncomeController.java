@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.nure.finance.model.Currency;
 import ua.nure.finance.model.Income;
 import ua.nure.finance.model.IncomeCategory;
-import ua.nure.finance.reposotory.AssetRepository;
-import ua.nure.finance.reposotory.CurrencyRepository;
-import ua.nure.finance.reposotory.IncomeCategoryRepository;
-import ua.nure.finance.reposotory.IncomeRepository;
+import ua.nure.finance.repository.AssetRepository;
+import ua.nure.finance.repository.CurrencyRepository;
+import ua.nure.finance.repository.IncomeCategoryRepository;
+import ua.nure.finance.repository.IncomeRepository;
 import ua.nure.finance.service.IncomeService;
 
 import java.time.LocalDate;

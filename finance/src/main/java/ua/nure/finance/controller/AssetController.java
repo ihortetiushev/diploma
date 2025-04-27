@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.nure.finance.model.Asset;
 import ua.nure.finance.model.Currency;
-import ua.nure.finance.reposotory.AssetRepository;
-import ua.nure.finance.reposotory.AssetCategoryRepository;
-import ua.nure.finance.reposotory.CurrencyRepository;
+import ua.nure.finance.repository.AssetRepository;
+import ua.nure.finance.repository.AssetCategoryRepository;
+import ua.nure.finance.repository.CurrencyRepository;
 
 import java.util.List;
 

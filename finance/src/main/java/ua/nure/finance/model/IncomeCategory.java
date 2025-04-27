@@ -6,10 +6,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Valid
+@Getter
+@Setter
 public class IncomeCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

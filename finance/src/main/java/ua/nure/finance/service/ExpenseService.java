@@ -3,8 +3,8 @@ package ua.nure.finance.service;
 import org.springframework.stereotype.Service;
 import ua.nure.finance.model.Asset;
 import ua.nure.finance.model.Expense;
-import ua.nure.finance.reposotory.AssetRepository;
-import ua.nure.finance.reposotory.ExpenseRepository;
+import ua.nure.finance.repository.AssetRepository;
+import ua.nure.finance.repository.ExpenseRepository;
 
 @Service
 public class ExpenseService {
