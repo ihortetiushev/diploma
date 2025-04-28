@@ -1,14 +1,9 @@
-function showAddDialog() {
-    $("#add-dialog").dialog();
-}
-
-function showEditDialog(id, value) {
-    $("#edit-id").prop('value', id);
-    $("#edit-name").prop('value', value);
-    $("#edit-dialog").dialog();
-}
-
-function showDeleteDialog(path, id) {
+function showDeleteDialog(event, type, id) {
+    event.preventDefault();
+    var path = 'delete-expenses';
+    if (type === 'INCOME') {
+        path = 'delete-income';
+    }
     $("#dialog-confirm").dialog({
       resizable: false,
       height: "auto",
@@ -16,7 +11,7 @@ function showDeleteDialog(path, id) {
       modal: true,
       buttons: {
         "Delete": function() {
-          $( this ).dialog( "close" );
+          $(this).dialog("close");
           $.ajax({
             url: '/' + path + '/' + id,
             type: 'GET',
@@ -29,7 +24,7 @@ function showDeleteDialog(path, id) {
           });
         },
         Cancel: function() {
-          $( this ).dialog( "close" );
+          $(this).dialog("close");
         }
       }
     });

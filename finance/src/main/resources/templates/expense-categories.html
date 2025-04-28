@@ -50,7 +50,7 @@
     <tr th:each="category : ${categories}">
         <td><span th:text="${category.name}">Name </span></td>
         <td><button th:onclick="showEditDialog([[${category.id}]], [[${category.name}]])">Edit</button></td>
-        <td><button th:onclick="showDeleteDialog('delete-expenses-category', [[${category.id}]])">Delete</button></span></td>
+        <td><button th:onclick="showDeleteDialog('delete-expense-category', [[${category.id}]])">Delete</button></span></td>
     </tr>
     </tbody>
 </table>

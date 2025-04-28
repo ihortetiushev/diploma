@@ -24,9 +24,9 @@ import java.time.LocalDate;
 @Controller
 public class ExpenseController extends BaseController {
     @Autowired
-    private ExpenseRepository expensesRepository;
+    private ExpenseRepository expenseRepository;
     @Autowired
-    private ExpenseCategoryRepository expensesCategoryRepository;
+    private ExpenseCategoryRepository expenseCategoryRepository;
     @Autowired
     private CurrencyRepository currencyRepository;
     @Autowired
@@ -41,7 +41,7 @@ public class ExpenseController extends BaseController {
         defaultCurrency.setCurrencyCode("UAH");
         expense.setCurrency(defaultCurrency);
         expense.setOperationDate(LocalDate.now());
-        model.addAttribute("categories", expensesCategoryRepository.findAll());
+        model.addAttribute("categories", expenseCategoryRepository.findAll());
         model.addAttribute("currencies", currencyRepository.findAll());
         model.addAttribute("assets", assetRepository.findAll());
         return "add-expense";
@@ -49,7 +49,7 @@ public class ExpenseController extends BaseController {
 
     @GetMapping("/expense-categories")
     public String expensesCategories(Model model, ExpenseCategory expenseCategory) {
-        model.addAttribute("categories", expensesCategoryRepository.findAll());
+        model.addAttribute("categories", expenseCategoryRepository.findAll());
         return "expense-categories";
     }
 
@@ -68,7 +68,7 @@ public class ExpenseController extends BaseController {
             return "expense-categories";
         }
 
-        expensesCategoryRepository.save(expenseCategory);
+        expenseCategoryRepository.save(expenseCategory);
         return "redirect:/expense-categories";
     }
 
@@ -79,52 +79,55 @@ public class ExpenseController extends BaseController {
             return "expense-categories";
         }
 
-        expensesCategoryRepository.save(expenseCategory);
+        expenseCategoryRepository.save(expenseCategory);
         return "redirect:/expense-categories";
     }
 
-    @GetMapping("/delete-expenses-category/{id}")
-    public String deleteExpensesCategory(@PathVariable("id") long id) {
-        ExpenseCategory expensesCategory = expensesCategoryRepository.findById(id)
+    @GetMapping("/delete-expense-category/{id}")
+    public String deleteExpenseCategory(@PathVariable("id") long id) {
+        ExpenseCategory expensesCategory = expenseCategoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid income category Id:" + id));
-        expensesCategoryRepository.delete(expensesCategory);
-        return "redirect:/expenses-categories";
+        expenseCategoryRepository.delete(expensesCategory);
+        return "redirect:/expense-categories";
     }
 
-    @GetMapping("/edit-expenses/{id}")
+    @GetMapping("/expense/edit/{id}")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
-        Expense expenses = expensesRepository.findById(id)
+        Expense expense = expenseRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid expenses id:" + id));
 
-        model.addAttribute("expenses", expenses);
-        return "update-expenses";
+        model.addAttribute("expense", expense);
+        model.addAttribute("categories", expenseCategoryRepository.findAll());
+        model.addAttribute("currencies", currencyRepository.findAll());
+        model.addAttribute("assets", assetRepository.findAll());
+        return "update-expense";
     }
 
 
     @GetMapping("/expenses-controller")
     public String showIncomeList(Model model) {
-        model.addAttribute("expenses", expensesRepository.findAll());
+        model.addAttribute("expenses", expenseRepository.findAll());
         return "expenses-controller";
     }
 
-    @PostMapping("/update-expenses/{id}")
-    public String updateExpenses(@PathVariable("id") long id, @Valid Expense expenses,
+    @PostMapping("/expense/edit/{id}")
+    public String updateExpense(@PathVariable("id") long id, @Valid Expense expenses,
                                  BindingResult result, Model model) {
         if (result.hasErrors()) {
             expenses.setId(id);
-            return "update-expenses";
+            return "update-expense";
         }
 
-        expensesRepository.save(expenses);
-        return "redirect:/";
+        expenseRepository.save(expenses);
+        return "redirect:/transactions";
     }
 
     @GetMapping("/delete-expenses/{id}")
     public String deleteExpenses(@PathVariable("id") long id, Model model) {
-        Expense expenses = expensesRepository.findById(id)
+        Expense expenses = expenseRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid expenses Id:" + id));
-        expensesRepository.delete(expenses);
-        return "redirect:/";
+        expenseRepository.delete(expenses);
+        return "redirect:/transactions";
     }
 
     @GetMapping("/")
@@ -142,7 +145,7 @@ public class ExpenseController extends BaseController {
     private String expenses( LocalDate startDate, LocalDate endDate, Model model) {
         endDate = endDate == null ? LocalDate.now() : endDate;
         startDate = startDate == null ? endDate.withDayOfMonth(1) : startDate;
-        prepareModel(expensesRepository.findByOperationDateBetween(startDate, endDate), model);
+        prepareModel(expenseRepository.findByOperationDateBetween(startDate, endDate), model);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         return "expenses";

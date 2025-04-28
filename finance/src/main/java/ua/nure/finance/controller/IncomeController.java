@@ -73,12 +73,15 @@ public class IncomeController extends BaseController {
         return "redirect:/income";
     }
 
-    @GetMapping("/edit-income/{id}")
+    @GetMapping("/income/edit/{id}")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
         Income income = incomeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid income id:" + id));
 
         model.addAttribute("income", income);
+        model.addAttribute("categories", incomeCategoryRepository.findAll());
+        model.addAttribute("currencies", currencyRepository.findAll());
+        model.addAttribute("assets", assetRepository.findAll());
         return "update-income";
     }
 
@@ -89,7 +92,7 @@ public class IncomeController extends BaseController {
     }
 
 
-    @PostMapping("/update-income/{id}")
+    @PostMapping("/income/edit/{id}")
     public String updateIncome(@PathVariable("id") long id, @Valid Income income,
                                BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -98,7 +101,7 @@ public class IncomeController extends BaseController {
         }
 
         incomeRepository.save(income);
-        return "redirect:/";
+        return "redirect:/transactions";
     }
 
     @PostMapping("/update-income-category")
@@ -117,7 +120,7 @@ public class IncomeController extends BaseController {
         Income income = incomeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid income Id:" + id));
         incomeRepository.delete(income);
-        return "redirect:/";
+        return "redirect:/transactions";
     }
 
     @GetMapping("/delete-income-category/{id}")

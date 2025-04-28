@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Редагування запису доходу</title>
+    <title>Edit Expense</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container mt-5">
-    <h2>Edit Income</h2>
-    <form th:action="@{'/income/edit/' + ${income.id}}" th:object="${income}" method="post">
+    <h2>Edit Expense</h2>
+    <form th:action="@{'/expense/edit/' + ${expense.id}}" th:object="${expense}" method="post">
         <div class="mb-3">
             <label for="amount" class="form-label">Amount</label>
             <input type="number" step="0.01" th:field="*{amount}" class="form-control" id="amount" required>
