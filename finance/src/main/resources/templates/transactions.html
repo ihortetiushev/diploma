@@ -121,10 +121,10 @@
                             <td>
                                 <a th:href="@{${transaction.type == 'INCOME'} ? '/income/edit/' + ${transaction.id} : '/expense/edit/' + ${transaction.id}}"
                                    class="btn btn-primary btn-sm">
-                                    Edit
+                                    Редагувати
                                 </a>
                             </td>
-                            <td><button class="btn btn-primary btn-sm" th:onclick="showDeleteDialog(event, [[${transaction.type}]], [[${transaction.id}]])">Delete</button></span></td>
+                            <td><button class="btn btn-primary btn-sm" th:onclick="showDeleteDialog(event, [[${transaction.type}]], [[${transaction.id}]])">Видалити</button></span></td>
                         </tr>
                         </tbody>
                     </table>
