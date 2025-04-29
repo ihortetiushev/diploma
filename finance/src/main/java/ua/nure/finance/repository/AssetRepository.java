@@ -7,5 +7,5 @@ import ua.nure.finance.model.Asset;
 import java.util.List;
 
 public interface AssetRepository extends JpaRepository<Asset, Long> {
-    List<Asset> findByNameContainingIgnoreCase(String name, Sort sort);
+    List<Asset> findByStatus(Asset.Status status, Sort sort);
 }

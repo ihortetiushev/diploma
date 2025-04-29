@@ -14,6 +14,13 @@
 </head>
 <body>
 
+<div id="dialog-confirm" title="Закрити актив" style="display:none;">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
+        Впевнені, що хочете закрити даний актив?
+    </p>
+</div>
+
 <div class="container">
     <aside class="sidebar">
         <h3>Персональні фінанси</h3>
@@ -76,6 +83,8 @@
                                           th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
                                 </a>
                             </th>
+                            <th>Description</th>
+                            <th colspan="2">Actions</th>
                         </tr>
 
                         <tr>
@@ -92,8 +101,11 @@
                                 <input class="form-control form-control-sm" type="text" name="currencyFilter"
                                        placeholder="Filter Currency" th:value="${currencyFilter}">
                             </th>
-                            <th></th>
-                            <th></th>
+                            <th/>
+                            <th/>
+                            <th/>
+                            <th/>
+                            <th/>
                         </tr>
                         </thead>
 
@@ -108,6 +120,11 @@
                             <td><span th:text="${asset.currency.currencyCode}"></span></td>
                             <td><span th:text="${asset.initialValue}"></span></td>
                             <td><span th:text="${asset.currentValue}"></span></td>
+                            <td><span th:text="${asset.description}"></span></td>
+                            <td>
+                                <a th:href="@{'/assets/edit/' + ${asset.id}}" class="btn btn-sm btn-warning me-1">Edit</a>
+                            </td>
+                            <td><button class="btn btn-primary btn-sm" th:onclick="showConfirmCloseAsserDialog(event, 'assets/close', [[${asset.id}]])">Закрити</button></span></td>
                         </tr>
                         </tbody>
                     </table>

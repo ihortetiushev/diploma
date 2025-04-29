@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,11 +30,13 @@ public class Asset {
     @JoinColumn(name = "currency_code", referencedColumnName = "currencyCode")
     private Currency currency;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "last_valuated_date")
     private LocalDate lastValuatedDate;
 
     @Column(nullable = false, length = 50)
     private String name;
+
     @Column(nullable = false, length = 255)
     private String description;
 
@@ -41,6 +44,7 @@ public class Asset {
     @JoinColumn(name = "category_id", nullable = false)
     private AssetCategory category;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
