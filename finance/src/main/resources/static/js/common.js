@@ -43,3 +43,22 @@ function showConfirmCloseAsserDialog(event, path, id) {
       }
     });
 }
+
+function showImportDialog(event, id) {
+    event.preventDefault();
+    document.getElementById("assetId").value = id;
+    $("#import-dialog").dialog({
+      resizable: false,
+      height: "auto",
+      width: 400,
+      modal: true,
+      buttons: {
+        "Імпортувати": function () {
+             $("#uploadForm").submit(); // Submit the form
+        },
+        "Скасувати": function () {
+            $(this).dialog("close");
+        }
+      }
+    });
+}

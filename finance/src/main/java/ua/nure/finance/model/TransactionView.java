@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Immutable;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class TransactionView {
     @Id
     private String type; // "INCOME" or "EXPENSE"
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "operation_date")
     private LocalDate operationDate;
 

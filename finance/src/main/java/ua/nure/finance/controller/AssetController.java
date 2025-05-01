@@ -7,16 +7,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ua.nure.finance.model.Asset;
-import ua.nure.finance.model.Currency;
-import ua.nure.finance.model.ExpenseCategory;
-import ua.nure.finance.model.Income;
-import ua.nure.finance.repository.AssetRepository;
-import ua.nure.finance.repository.AssetCategoryRepository;
-import ua.nure.finance.repository.CurrencyRepository;
+import org.springframework.web.multipart.MultipartFile;
+import ua.nure.finance.model.*;
+import ua.nure.finance.repository.*;
+import ua.nure.finance.service.ExpenseService;
+import ua.nure.finance.service.IncomeService;
+import ua.nure.finance.service.PrivatbankDataImport;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/assets")
@@ -28,6 +27,16 @@ public class AssetController {
     private AssetRepository assetRepository;
     @Autowired
     private CurrencyRepository currencyRepository;
+    @Autowired
+    private PrivatbankDataImport privatbankDataImport;
+    @Autowired
+    private IncomeCategoryRepository incomeCategoryRepository;
+    @Autowired
+    private ExpenseCategoryRepository expenseCategoryRepository;
+    @Autowired
+    private IncomeService incomeService;
+    @Autowired
+    private ExpenseService expenseService;
 
     @GetMapping
     public String listAssets(
@@ -110,4 +119,55 @@ public class AssetController {
         return "redirect:/assets";
     }
 
+    @PostMapping("/import")
+    public String handleImport(@RequestParam("file") MultipartFile file,
+                               @RequestParam("fileType") ImportType importType,
+                               @RequestParam("assetId") Long assetId, Model model) throws IOException {
+        switch (importType) {
+            case privatbank -> processPrivat(file, assetId, model);
+            case monobank -> processMono(file, assetId, model);
+        }
+
+        return "import-bank-statement";
+    }
+
+    private void processPrivat(MultipartFile file, Long assetId, Model model) throws IOException {
+        BankStatementImportDTO importDTO = privatbankDataImport.importData(file.getInputStream(), assetId);
+
+        model.addAttribute("importDTO", importDTO);
+        model.addAttribute("incomeCategories", incomeCategoryRepository.findAll());
+        model.addAttribute("expenseCategories", expenseCategoryRepository.findAll());
+    }
+
+    private void processMono(MultipartFile file, Long assetId, Model model) {
+
+    }
+
+    @PostMapping("/import/confirm")
+    public String confirmImport(@ModelAttribute BankStatementImportDTO importDTO) {
+        for (TransactionView op : importDTO.getOperations()) {
+            if ("INCOME".equals(op.getType())) {
+                Income income = new Income();
+                income.setOperationDate(op.getOperationDate());
+                income.setAsset(op.getAsset());
+                income.setCategory(incomeCategoryRepository.findById(Long.valueOf(op.getCategory())).get());
+                income.setCurrency(currencyRepository.findById(op.getCurrency()).get());
+                income.setAmount(op.getAmount());
+                income.setAmountMainCurrency(op.getAmount());
+                income.setDescription(op.getDescription());
+                incomeService.saveIncome(income);
+            } else {
+                Expense expense = new Expense();
+                expense.setOperationDate(op.getOperationDate());
+                expense.setAsset(op.getAsset());
+                expense.setCategory(expenseCategoryRepository.findById(Long.valueOf(op.getCategory())).get());
+                expense.setCurrency(currencyRepository.findById(op.getCurrency()).get());
+                expense.setAmount(op.getAmount());
+                expense.setAmountMainCurrency(op.getAmount());
+                expense.setDescription(op.getDescription());
+                expenseService.saveExpense(expense);
+            }
+        }
+        return "redirect:/transactions";
+    }
 }

@@ -21,6 +21,24 @@
     </p>
 </div>
 
+<div id="import-dialog" title="Імпортування даних з банковської виписки" style="display:none;">
+    <form id="uploadForm" th:action="@{/assets/import}" method="post" enctype="multipart/form-data" class="mb-4">
+        <div class="mb-3">
+            <label for="file" class="form-label">Оберіть файл</label>
+            <input type="file" class="form-control" id="file" name="file" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="fileType" class="form-label">Тип виписки</label>
+            <select class="form-select" id="fileType" name="fileType" required>
+                <option value="privatbank">Приватбанк</option>
+                <option value="monobank">Monobank</option>
+            </select>
+        </div>
+        <input type="hidden" name="assetId" id="assetId">
+    </form>
+</div>
+
 <div class="container">
     <aside class="sidebar">
         <h3>Персональні фінанси</h3>
@@ -84,7 +102,7 @@
                                 </a>
                             </th>
                             <th>Description</th>
-                            <th colspan="2">Actions</th>
+                            <th colspan="3">Actions</th>
                         </tr>
 
                         <tr>
@@ -106,6 +124,7 @@
                             <th/>
                             <th/>
                             <th/>
+                            <th/>
                         </tr>
                         </thead>
 
@@ -121,10 +140,11 @@
                             <td><span th:text="${asset.initialValue}"></span></td>
                             <td><span th:text="${asset.currentValue}"></span></td>
                             <td><span th:text="${asset.description}"></span></td>
+                            <td><button type="button" class="btn btn-primary btn-sm" th:onclick="showImportDialog(event, [[${asset.id}]])">Імпортувати</button></td>
                             <td>
-                                <a th:href="@{'/assets/edit/' + ${asset.id}}" class="btn btn-sm btn-warning me-1">Edit</a>
+                                <a th:href="@{'/assets/edit/' + ${asset.id}}" class="btn btn-sm btn-warning me-1">Редагувати</a>
                             </td>
-                            <td><button type="button" class="btn btn-primary btn-sm" th:onclick="showConfirmCloseAsserDialog(event, 'assets/close', [[${asset.id}]])">Закрити</button></span></td>
+                            <td><button type="button" class="btn btn-primary btn-sm" th:onclick="showConfirmCloseAsserDialog(event, 'assets/close', [[${asset.id}]])">Закрити</button></td>
                         </tr>
                         </tbody>
                     </table>
