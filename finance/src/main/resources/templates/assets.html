@@ -42,7 +42,7 @@
         </header>
 
 
-        <section class="main-panels">
+        <section>
             <div>
                 <form method="get" th:action="@{/assets}">
                     <table class="table table-striped">
@@ -124,7 +124,7 @@
                             <td>
                                 <a th:href="@{'/assets/edit/' + ${asset.id}}" class="btn btn-sm btn-warning me-1">Edit</a>
                             </td>
-                            <td><button class="btn btn-primary btn-sm" th:onclick="showConfirmCloseAsserDialog(event, 'assets/close', [[${asset.id}]])">Закрити</button></span></td>
+                            <td><button type="button" class="btn btn-primary btn-sm" th:onclick="showConfirmCloseAsserDialog(event, 'assets/close', [[${asset.id}]])">Закрити</button></span></td>
                         </tr>
                         </tbody>
                     </table>

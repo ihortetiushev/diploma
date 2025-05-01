@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Income Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
@@ -12,6 +13,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script th:inline="javascript">
         let chartData = [[${chartData}]];
+
     </script>
     <script th:src="@{/js/index.js}" type="text/javascript"></script>
     <script th:src="@{/js/common.js}" type="text/javascript"></script>
@@ -27,7 +29,7 @@
                 <li><a href="#" onclick="setFormAction('/income')" class="active">Доходи</a></li>
                 <li><a href="/assets">Активи</a></li>
                 <li><a href="#" onclick="setFormAction('/transactions')">Журнал транзакцій</a></li>
-                <li><a href="#" >Налаштування</a></li>
+                <li><a href="#">Налаштування</a></li>
             </ul>
         </nav>
     </aside>
@@ -44,26 +46,17 @@
                     <input type="date" id="endDate" name="endDate"
                            th:value="${endDate != null} ? ${endDate} : ''"
                            required/>
-                    <button type="submit" id='expenses-button' class="btn btn-outline-secondary" onclick="setFormAction('/income')">Оновити</button>
+                    <button type="submit" id='expenses-button' class="btn btn-outline-secondary"
+                            onclick="setFormAction('/income')">Оновити
+                    </button>
                 </div>
             </form>
         </header>
 
-<!--
-        <section class="summary-bar">
-            <div>Total Income: <span th:text="${totalIncome}">$11,538.46</span></div>
-            <div>Total Expenses: <span th:text="${totalExpenses}">$8,564.53</span></div>
-            <div class="iae">IAE: <span th:text="${iae}">$2,973.93</span></div>
-        </section>
--->
-
         <section class="main-panels">
 
             <div class="panel chart-panel">
-<!--                <h3>Expense Distribution</h3>
-                <img th:src="@{/images/chart-placeholder.png}" alt="Pie Chart Placeholder"/>-->
                 <div id="chart_div"></div>
-                <!-- Replace with dynamic chart if desired -->
             </div>
 
             <div class="panel averages-panel">
@@ -73,7 +66,7 @@
                     <div th:case="*">
                         <div class="record-category" th:each="byCategory : ${totalByCategory}">
                             <h1 th:text="${byCategory.key}"/>
-                            <h1 th:text="${byCategory.value} + ' ₴'">___ ₴</h1>
+                            <h1 th:text="${byCategory.value} + ' UAH'">___ ₴</h1>
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,6 @@ import java.math.BigDecimal;
 public interface CategorizedAmount {
     String getCategoryName();
 
-    BigDecimal getAmount();
+    BigDecimal getAmountMainCurrency();
 
 }

@@ -23,6 +23,11 @@ public class Expense implements CategorizedAmount {
 
     @NotNull(message = "Amount is mandatory")
     private BigDecimal amount;
+
+    @NotNull(message = "Amount in main currency is mandatory")
+    @Column(name = "amount_main_currency", nullable = false)
+    private BigDecimal amountMainCurrency;
+
     @NotBlank(message = "Description is mandatory")
     private String description;
 
@@ -42,14 +47,6 @@ public class Expense implements CategorizedAmount {
     @ManyToOne
     @JoinColumn(name = "currency_code", referencedColumnName = "currencyCode")
     private Currency currency;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     @Override
     public String getCategoryName() {

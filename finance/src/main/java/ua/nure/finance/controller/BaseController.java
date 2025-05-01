@@ -23,7 +23,7 @@ abstract class BaseController {
         for (CategorizedAmount item : data) {
             BigDecimal current = totals.get(item.getCategoryName());
             current = current == null ? new BigDecimal(0) : current;
-            BigDecimal newAmount = current.add(item.getAmount());
+            BigDecimal newAmount = current.add(item.getAmountMainCurrency());
             totals.put(item.getCategoryName(), newAmount);
         }
         return totals;

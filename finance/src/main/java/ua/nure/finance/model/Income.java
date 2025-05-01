@@ -22,6 +22,11 @@ public class Income implements CategorizedAmount {
 
     @NotNull(message = "Amount is mandatory")
     private BigDecimal amount;
+
+    @NotNull(message = "Amount in main currency is mandatory")
+    @Column(name = "amount_main_currency", nullable = false)
+    private BigDecimal amountMainCurrency;
+
     @NotBlank(message = "Description is mandatory")
     private String description;
 

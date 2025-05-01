@@ -28,6 +28,8 @@ public class TransactionView {
 
     private BigDecimal amount;
 
+    private BigDecimal amountMainCurrency;
+
     private String currency;
 
     @ManyToOne
