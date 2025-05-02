@@ -4,9 +4,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ua.nure.finance.model.IncomeCategory;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface IncomeCategoryRepository extends CrudRepository<IncomeCategory, Long> {
-    Optional<IncomeCategory> findByName(String name);
+    List<IncomeCategory> findAll();
 }

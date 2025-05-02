@@ -2,9 +2,12 @@ function showAddDialog() {
     $("#add-dialog").dialog();
 }
 
-function showEditDialog(id, value) {
+function showEditDialog(id, value, keywords) {
     $("#edit-id").prop('value', id);
     $("#edit-name").prop('value', value);
+    if (keywords) {
+        $("#edit-keywords").prop('value', keywords || '');
+    }
     $("#edit-dialog").dialog();
 }
 

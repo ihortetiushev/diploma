@@ -17,5 +17,6 @@ public class ExpenseCategory {
     private long id;
     @NotNull(message = "Name is mandatory")
     private String name;
-
+    @Column(length = 1000)
+    private String keywords;
 }

@@ -19,6 +19,7 @@
         <thead class="table-light">
         <tr>
             <th>Category Name</th>
+            <th>Keywords</th>
             <th style="width: 100px;">Edit</th>
             <th style="width: 100px;">Delete</th>
         </tr>
@@ -28,9 +29,10 @@
             <td colspan="3" class="text-center">No data</td>
         </tr>
         <tr th:each="category : ${categories}">
-            <td><span th:text="${category.name}">Name</span></td>
+            <td th:text="${category.name}">Name</td>
+            <td th:text="${category.keywords}">Keywords</td>
             <td>
-                <button class="btn btn-sm btn-warning" th:onclick="showEditDialog([[${category.id}]], [[${category.name}]])">Edit</button>
+                <button class="btn btn-sm btn-warning" th:onclick="showEditDialog([[${category.id}]], [[${category.name}]], [[${category.keywords}]])">Edit</button>
             </td>
             <td>
                 <button class="btn btn-sm btn-danger" th:onclick="showDeleteDialog('delete-income-category', [[${category.id}]])">Delete</button>
@@ -51,6 +53,14 @@
             <input type="text" th:field="*{name}" id="add-name" class="form-control" placeholder="Name" required>
             <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
+        <div class="mb-3">
+            <label for="add-keywords" class="form-label">Keywords (comma separated)</label>
+            <textarea th:field="*{keywords}"
+                      id="add-keywords"
+                      class="form-control form-control-sm"
+                      rows="3"
+                      placeholder="word1,word2,word3"></textarea>
+        </div>
         <button type="submit" class="btn btn-success">Add</button>
     </form>
 </div>
@@ -63,6 +73,14 @@
             <label for="edit-name" class="form-label">Name</label>
             <input type="text" th:field="*{name}" id="edit-name" class="form-control" placeholder="Name" required>
             <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+        <div class="mb-3">
+            <label for="edit-keywords" class="form-label">Keywords (comma separated)</label>
+            <textarea th:field="*{keywords}"
+                      id="edit-keywords"
+                      class="form-control form-control-sm"
+                      rows="3"
+                      placeholder="word1,word2,word3"></textarea>
         </div>
         <button type="submit" class="btn btn-success">Save</button>
     </form>
