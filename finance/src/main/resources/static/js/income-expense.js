@@ -24,3 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Initial call on load
         updateAmountMainCurrencyField();
     });
+
+
+$(document).ready(function () {
+    $('select.form-select').on('change', function () {
+        if ($(this).val()) {
+            $(this).removeClass('is-invalid');
+        }
+    });
+});

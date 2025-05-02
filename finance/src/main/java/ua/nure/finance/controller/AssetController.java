@@ -146,7 +146,7 @@ public class AssetController {
     @PostMapping("/import/confirm")
     public String confirmImport(@ModelAttribute BankStatementImportDTO importDTO) {
         for (TransactionView op : importDTO.getOperations()) {
-            if ("INCOME".equals(op.getType())) {
+            if (TransactionType.INCOME.name().equals(op.getType())) {
                 Income income = new Income();
                 income.setOperationDate(op.getOperationDate());
                 income.setAsset(op.getAsset());
