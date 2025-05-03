@@ -52,8 +52,16 @@ public class Asset {
     @Column(nullable = false)
     private Status status = Status.active;
 
+    @Column(name = "initial_price_per_share", precision = 19, scale = 4)
+    private BigDecimal initialPricePerShare;
+
+    @Column(name = "quantity", precision = 19, scale = 4)
+    private BigDecimal quantity;
+
+    @Column(name = "stock_exchange", length = 50)
+    private String stockExchange;
+
     public enum Status {
         active, closed
     }
-
 }
