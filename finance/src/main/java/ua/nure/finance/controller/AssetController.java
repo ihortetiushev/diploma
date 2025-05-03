@@ -13,9 +13,11 @@ import ua.nure.finance.repository.*;
 import ua.nure.finance.service.ExpenseService;
 import ua.nure.finance.service.IncomeService;
 import ua.nure.finance.service.PrivatbankDataImport;
+import ua.nure.finance.service.StockPriceService;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +42,8 @@ public class AssetController {
     private IncomeService incomeService;
     @Autowired
     private ExpenseService expenseService;
+    @Autowired
+    private StockPriceService stockPriceService;
 
     @GetMapping
     public String listAssets(
@@ -56,6 +60,17 @@ public class AssetController {
                 .filter(asset -> (categoryFilter == null || asset.getCategory().getName().toLowerCase().contains(categoryFilter.toLowerCase())))
                 .filter(asset -> (nameFilter == null || asset.getName().toLowerCase().contains(nameFilter.toLowerCase())))
                 .filter(asset -> (currencyFilter == null || asset.getCurrency().getCurrencyCode().toLowerCase().contains(currencyFilter.toLowerCase())))
+                .peek(asset -> {
+                    if (asset.getInitialPricePerShare() != null && asset.getQuantity() != null) {
+                        BigDecimal price = stockPriceService.fetchCurrentPrice(asset.getName());
+                        if (price != null) {
+                            BigDecimal calculatedCurrentValue = price.multiply(new BigDecimal(asset.getQuantity()));
+                            asset.setCurrentValue(calculatedCurrentValue);
+                            asset.setLastValuatedDate(LocalDateTime.now());
+                            assetRepository.save(asset);
+                        }
+                    }
+                })
                 .toList();
 
         Map<String, BigDecimal[]> totalsByCurrency = new HashMap<>();

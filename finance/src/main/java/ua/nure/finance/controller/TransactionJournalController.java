@@ -1,11 +1,13 @@
 package ua.nure.finance.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ua.nure.finance.model.Asset;
 import ua.nure.finance.model.ExpenseCategory;
 import ua.nure.finance.model.IncomeCategory;
 import ua.nure.finance.model.TransactionView;
@@ -71,7 +73,7 @@ public class TransactionJournalController {
                     .filter(t -> t.getDescription() != null && t.getDescription().toLowerCase().contains(descriptionFilter.toLowerCase()))
                     .toList();
         }
-        if (assetFilter != null ) {
+        if (assetFilter != null) {
             transactions = transactions.stream()
                     .filter(t -> t.getAsset() != null && t.getAsset().getId() == assetFilter)
                     .toList();
@@ -86,7 +88,8 @@ public class TransactionJournalController {
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("currencies", currencyRepository.findAll());
-        model.addAttribute("assets", assetRepository.findAll());
+        model.addAttribute("assets", assetRepository.findByStatus(Asset.Status.active, Sort.by(Sort.Direction.DESC, "startDate")));
+        model.addAttribute("accounts", assetRepository.findByStatusAndCategory_Name(Asset.Status.active, "Рахунки"));
         model.addAttribute("categoryNames", getAllCategoriesNames());
 
         return "transactions";

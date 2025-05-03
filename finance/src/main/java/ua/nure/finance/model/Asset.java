@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "assets")
@@ -30,9 +31,9 @@ public class Asset {
     @JoinColumn(name = "currency_code", referencedColumnName = "currencyCode")
     private Currency currency;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "last_valuated_date")
-    private LocalDate lastValuatedDate;
+    private LocalDateTime lastValuatedDate;
 
     @Column(nullable = false, length = 50)
     private String name;
@@ -55,8 +56,8 @@ public class Asset {
     @Column(name = "initial_price_per_share", precision = 19, scale = 4)
     private BigDecimal initialPricePerShare;
 
-    @Column(name = "quantity", precision = 19, scale = 4)
-    private BigDecimal quantity;
+    @Column(name = "quantity")
+    private Integer quantity;
 
     @Column(name = "stock_exchange", length = 50)
     private String stockExchange;

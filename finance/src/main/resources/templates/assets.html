@@ -101,6 +101,7 @@
                                           th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
                                 </a>
                             </th>
+                            <th>Quantity</th>
                             <th>Description</th>
                             <th colspan="3">Actions</th>
                         </tr>
@@ -127,8 +128,6 @@
                             <th/>
                         </tr>
                         </thead>
-
-
                         <tbody>
                         <tr th:if="${assets.empty}">
                             <td colspan="5">No data</td>
@@ -139,12 +138,17 @@
                             <td><span th:text="${asset.currency.currencyCode}"></span></td>
                             <td><span th:text="${asset.initialValue}"></span></td>
                             <td><span th:text="${asset.currentValue}"></span></td>
+                            <td><span th:text="${asset.quantity}"></span></td>
                             <td><span th:text="${asset.description}"></span></td>
-                            <td><button type="button" class="btn btn-primary btn-sm" th:onclick="showImportDialog(event, [[${asset.id}]])">Імпортувати</button></td>
                             <td>
                                 <a th:href="@{'/assets/edit/' + ${asset.id}}" class="btn btn-sm btn-warning me-1">Редагувати</a>
                             </td>
-                            <td><button type="button" class="btn btn-primary btn-sm" th:onclick="showConfirmCloseAsserDialog(event, 'assets/close', [[${asset.id}]])">Закрити</button></td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm"
+                                        th:onclick="showConfirmCloseAsserDialog(event, 'assets/close', [[${asset.id}]])">
+                                    Закрити
+                                </button>
+                            </td>
                         </tr>
                         </tbody>
                         <tfoot>

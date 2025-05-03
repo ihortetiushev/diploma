@@ -1,0 +1,1 @@
+UPDATE assets_category SET read_only = TRUE WHERE name = 'Рахунки';

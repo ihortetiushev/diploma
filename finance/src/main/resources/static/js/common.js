@@ -44,9 +44,8 @@ function showConfirmCloseAsserDialog(event, path, id) {
     });
 }
 
-function showImportDialog(event, id) {
+function showImportDialog(event) {
     event.preventDefault();
-    document.getElementById("assetId").value = id;
     $("#import-dialog").dialog({
       resizable: false,
       height: "auto",

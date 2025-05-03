@@ -16,6 +16,29 @@
 <div id="dialog-confirm" title="Видалити запис?" style="display:none">
     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Запис буде видалено без можливості відновлення. Впевнені?</p>
 </div>
+<div id="import-dialog" title="Імпортування даних з банковської виписки" style="display:none;">
+    <form id="uploadForm" th:action="@{/assets/import}" method="post" enctype="multipart/form-data" class="mb-4">
+        <div class="mb-3">
+            <label for="file" class="form-label">Оберіть файл</label>
+            <input type="file" class="form-control" id="file" name="file" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="fileType" class="form-label">Тип виписки</label>
+            <select class="form-select" id="fileType" name="fileType" required>
+                <option value="privatbank">Приватбанк</option>
+                <option value="monobank">Monobank</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="assetId" class="form-label">Рахунок</label>
+            <select class="form-select" id="assetId" name="assetId" required>
+                <option value="">-- Оберіть рахунок --</option>
+                <option th:each="asset : ${accounts}" th:value="${asset.id}" th:text="${asset.name}"></option>
+            </select>
+        </div>
+    </form>
+</div>
 <div class="container">
     <aside class="sidebar">
         <h3>Персональні фінанси</h3>
@@ -139,6 +162,7 @@
                 <div class="footer-content">
                     <nav class="footer-links">
                         <a href="/" class="btn btn-outline-secondary">На головну</a>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" th:onclick="showImportDialog(event)">Імпортувати</button>
                     </nav>
                 </div>
             </footer>
