@@ -15,7 +15,10 @@ import ua.nure.finance.service.IncomeService;
 import ua.nure.finance.service.PrivatbankDataImport;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/assets")
@@ -55,6 +58,17 @@ public class AssetController {
                 .filter(asset -> (currencyFilter == null || asset.getCurrency().getCurrencyCode().toLowerCase().contains(currencyFilter.toLowerCase())))
                 .toList();
 
+        Map<String, BigDecimal[]> totalsByCurrency = new HashMap<>();
+        for (Asset asset : assets) {
+            String currencyCode = asset.getCurrency().getCurrencyCode();
+            BigDecimal initial = asset.getInitialValue() != null ? asset.getInitialValue() : BigDecimal.ZERO;
+            BigDecimal current = asset.getCurrentValue() != null ? asset.getCurrentValue() : BigDecimal.ZERO;
+
+            totalsByCurrency.computeIfAbsent(currencyCode, k -> new BigDecimal[]{BigDecimal.ZERO, BigDecimal.ZERO});
+            totalsByCurrency.get(currencyCode)[0] = totalsByCurrency.get(currencyCode)[0].add(initial);
+            totalsByCurrency.get(currencyCode)[1] = totalsByCurrency.get(currencyCode)[1].add(current);
+        }
+
         model.addAttribute("assets", assets);
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("asset", new Asset());
@@ -64,6 +78,8 @@ public class AssetController {
         model.addAttribute("currencyFilter", currencyFilter);
         model.addAttribute("sort", sort);
         model.addAttribute("direction", direction);
+
+        model.addAttribute("totalsByCurrency", totalsByCurrency);
 
         return "assets";
     }

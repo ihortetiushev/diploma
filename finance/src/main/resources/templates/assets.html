@@ -147,6 +147,14 @@
                             <td><button type="button" class="btn btn-primary btn-sm" th:onclick="showConfirmCloseAsserDialog(event, 'assets/close', [[${asset.id}]])">Закрити</button></td>
                         </tr>
                         </tbody>
+                        <tfoot>
+                        <tr th:each="entry : ${totalsByCurrency}">
+                            <td colspan="3" class="text-end fw-bold" th:text="'Total (' + ${entry.key} + '):'"></td>
+                            <td class="fw-bold" th:text="${entry.value[0]}"></td>
+                            <td class="fw-bold" th:text="${entry.value[1]}"></td>
+                            <td colspan="4"></td>
+                        </tr>
+                        </tfoot>
                     </table>
                     <button type="submit" style="display:none"></button>
                 </form>
