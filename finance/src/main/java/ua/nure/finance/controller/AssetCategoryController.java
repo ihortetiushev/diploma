@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ua.nure.finance.model.AssetCategory;
 import ua.nure.finance.repository.AssetCategoryRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -31,6 +29,11 @@ public class AssetCategoryController {
     // Save or update category
     @PostMapping("/save")
     public String saveCategory(@ModelAttribute AssetCategory category) {
+        Optional<AssetCategory> existing = categoryRepository.findById(category.getId());
+        if (existing.isPresent() && existing.get().isReadOnly()) {
+            // Don't allow changes
+            return "redirect:/assets-categories?error=readonly";
+        }
         categoryRepository.save(category);
         return "redirect:/assets-categories";
     }
@@ -51,6 +54,10 @@ public class AssetCategoryController {
     // Delete category
     @GetMapping("/delete/{id}")
     public String deleteCategory(@PathVariable Long id) {
+        Optional<AssetCategory> category = categoryRepository.findById(id);
+        if (category.isPresent() && category.get().isReadOnly()) {
+            return "redirect:/assets-categories?error=readonly";
+        }
         categoryRepository.deleteById(id);
         return "redirect:/assets-categories";
     }

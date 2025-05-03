@@ -30,10 +30,22 @@
         <tr th:each="category : ${categories}">
             <td><span th:text="${category.name}">Name</span></td>
             <td>
-                <button class="btn btn-sm btn-warning" th:onclick="showEditDialog([[${category.id}]], [[${category.name}]])">Edit</button>
+                <span th:if="${category.readOnly}" title="На цю категорію зав'язана бізнес-логіка. Ії не можна редагувати">
+                    <button class="btn btn-sm btn-warning" disabled>Edit</button>
+                </span>
+                <button class="btn btn-sm btn-warning" th:onclick="showEditDialog([[${category.id}]], [[${category.name}]])"
+                        th:if="${!category.readOnly}">
+                    Edit
+                </button>
             </td>
             <td>
-                <button class="btn btn-sm btn-danger" th:onclick="showDeleteDialog('assets-categories/delete', [[${category.id}]])">Delete</button>
+                <span th:if="${category.readOnly}" title="На цю категорію зав'язана бізнес-логіка. Ії не можна видаляти">
+                    <button class="btn btn-sm btn-danger" disabled>Delete</button>
+                </span>
+                <button class="btn btn-sm btn-danger" th:onclick="showDeleteDialog('assets-categories/delete', [[${category.id}]])"
+                        th:if="${!category.readOnly}">
+                    Delete
+                </button>
             </td>
         </tr>
         </tbody>
