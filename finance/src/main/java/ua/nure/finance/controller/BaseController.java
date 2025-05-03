@@ -2,20 +2,42 @@ package ua.nure.finance.controller;
 
 import org.springframework.ui.Model;
 import ua.nure.finance.model.CategorizedAmount;
+import ua.nure.finance.model.TransactionType;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 abstract class BaseController {
-    protected void prepareModel(Iterable<? extends CategorizedAmount> data, Model model) {
-        List<CategorizedAmount> dataList = new ArrayList<>();
-        data.forEach(dataList::add);
+    protected void prepareModel(List<? extends CategorizedAmount> expenseData,
+                                List<? extends CategorizedAmount> incomeData,
+                                Model model, TransactionType type) {
+        List<? extends CategorizedAmount> dataList = type == TransactionType.INCOME ? incomeData : expenseData;
         Map<String, BigDecimal> totalsByCategory = getTotalsByCategory(dataList);
-        model.addAttribute("totalByCategory", totalsByCategory);
+        model.addAttribute("totalByCategory", getSortedMap(totalsByCategory));
         model.addAttribute("chartData", getChartData(totalsByCategory));
+        BigDecimal totalAmount = totalsByCategory.values().stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        model.addAttribute("totalAmount", totalAmount);
+        BigDecimal income = incomeData.stream().map(i -> i.getAmountMainCurrency())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        model.addAttribute("totalIncome", income);
+        BigDecimal expenses = expenseData.stream().map(e -> e.getAmountMainCurrency())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        model.addAttribute("totalExpenses", expenses);
+        model.addAttribute("diff", income.subtract(expenses));
+    }
+
+    protected Map<String, BigDecimal> getSortedMap(Map<String, BigDecimal> totalsByCategory) {
+        Map<String, BigDecimal> sortedTotalsByCategory = totalsByCategory.entrySet().stream()
+                .sorted(Map.Entry.<String, BigDecimal>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, // merge function (not needed here)
+                        LinkedHashMap::new // keeps insertion order
+                ));
+        return sortedTotalsByCategory;
     }
 
     protected Map<String, BigDecimal> getTotalsByCategory(List<? extends CategorizedAmount> data) {

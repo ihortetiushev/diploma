@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.nure.finance.model.Currency;
 import ua.nure.finance.model.Expense;
 import ua.nure.finance.model.ExpenseCategory;
-import ua.nure.finance.repository.AssetRepository;
-import ua.nure.finance.repository.CurrencyRepository;
-import ua.nure.finance.repository.ExpenseCategoryRepository;
-import ua.nure.finance.repository.ExpenseRepository;
+import ua.nure.finance.model.TransactionType;
+import ua.nure.finance.repository.*;
 import ua.nure.finance.service.ExpenseService;
 
 import java.time.LocalDate;
@@ -25,6 +23,8 @@ import java.time.LocalDate;
 public class ExpenseController extends BaseController {
     @Autowired
     private ExpenseRepository expenseRepository;
+    @Autowired
+    private IncomeRepository incomeRepository;
     @Autowired
     private ExpenseCategoryRepository expenseCategoryRepository;
     @Autowired
@@ -74,7 +74,7 @@ public class ExpenseController extends BaseController {
 
     @PostMapping("/update-expenses-category")
     public String updateExpenseCategory(@Valid ExpenseCategory expenseCategory,
-                                         BindingResult result) {
+                                        BindingResult result) {
         if (result.hasErrors()) {
             return "expense-categories";
         }
@@ -112,7 +112,7 @@ public class ExpenseController extends BaseController {
 
     @PostMapping("/expense/edit/{id}")
     public String updateExpense(@PathVariable("id") long id, @Valid Expense expenses,
-                                 BindingResult result, Model model) {
+                                BindingResult result, Model model) {
         if (result.hasErrors()) {
             expenses.setId(id);
             return "update-expense";
@@ -137,15 +137,17 @@ public class ExpenseController extends BaseController {
 
     @GetMapping("/expenses")
     public String getExpenses(@RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                              @RequestParam(value = "endDate" ,required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                              @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                               Model model) {
         return expenses(startDate, endDate, model);
     }
 
-    private String expenses( LocalDate startDate, LocalDate endDate, Model model) {
+    private String expenses(LocalDate startDate, LocalDate endDate, Model model) {
         endDate = endDate == null ? LocalDate.now() : endDate;
         startDate = startDate == null ? endDate.withDayOfMonth(1) : startDate;
-        prepareModel(expenseRepository.findByOperationDateBetween(startDate, endDate), model);
+        prepareModel(expenseRepository.findByOperationDateBetween(startDate, endDate),
+                incomeRepository.findByOperationDateBetween(startDate, endDate),
+                model, TransactionType.EXPENSE);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         return "expenses";

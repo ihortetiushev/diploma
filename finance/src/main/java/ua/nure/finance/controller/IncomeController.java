@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.nure.finance.model.Currency;
 import ua.nure.finance.model.Income;
 import ua.nure.finance.model.IncomeCategory;
-import ua.nure.finance.repository.AssetRepository;
-import ua.nure.finance.repository.CurrencyRepository;
-import ua.nure.finance.repository.IncomeCategoryRepository;
-import ua.nure.finance.repository.IncomeRepository;
+import ua.nure.finance.model.TransactionType;
+import ua.nure.finance.repository.*;
 import ua.nure.finance.service.IncomeService;
 
 import java.time.LocalDate;
@@ -26,6 +24,8 @@ public class IncomeController extends BaseController {
 
     @Autowired
     private IncomeRepository incomeRepository;
+    @Autowired
+    private ExpenseRepository expenseRepository;
     @Autowired
     private IncomeCategoryRepository incomeCategoryRepository;
     @Autowired
@@ -137,7 +137,9 @@ public class IncomeController extends BaseController {
                             Model model) {
         endDate = endDate == null ? LocalDate.now() : endDate;
         startDate = startDate == null ? endDate.withDayOfMonth(1) : startDate;
-        prepareModel(incomeRepository.findByOperationDateBetween(startDate, endDate), model);
+        prepareModel(expenseRepository.findByOperationDateBetween(startDate, endDate),
+                incomeRepository.findByOperationDateBetween(startDate, endDate), model,
+                TransactionType.INCOME);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         return "income";

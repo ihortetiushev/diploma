@@ -52,7 +52,13 @@
                 </div>
             </form>
         </header>
-
+        <section class="summary-bar">
+            <div>Загалом доход: <span th:text="${totalIncome} + ' UAH'">___ ₴</span></div>
+            <div>Загалом витрати: <span th:text="${totalExpenses}  + ' UAH'">___ ₴</span></div>
+            <div class="iae" th:classappend="${diff < 0} ? 'text-danger'">
+                Різниця: <span th:text="${diff}  + ' UAH'">___ ₴</span>
+            </div>
+        </section>
         <section class="main-panels">
 
             <div class="panel chart-panel">
@@ -65,9 +71,13 @@
                     <h2 th:case="null">No data</h2>
                     <div th:case="*">
                         <div class="record-category" th:each="byCategory : ${totalByCategory}">
-                            <h1 th:text="${byCategory.key}"/>
-                            <h1 th:text="${byCategory.value} + ' UAH'">___ ₴</h1>
+                            <h5 th:text="${byCategory.key}"/>
+                            <h5 th:text="${byCategory.value} + ' UAH'">___ ₴</h5>
                         </div>
+                    </div>
+                    <div class="record-category mt-3">
+                        <h5><strong>Загалом:</strong></h5>
+                        <h5><span th:text="${totalAmount} + ' UAH'">___ ₴</span></h5>
                     </div>
                 </div>
             </div>
