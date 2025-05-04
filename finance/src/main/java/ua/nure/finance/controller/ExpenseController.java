@@ -6,10 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ua.nure.finance.model.Currency;
 import ua.nure.finance.model.Expense;
 import ua.nure.finance.model.ExpenseCategory;
@@ -54,17 +51,18 @@ public class ExpenseController extends BaseController {
     }
 
     @PostMapping("/add-expense")
-    public String addExpense(@Valid Expense expenses, BindingResult result) {
+    public String addExpense(@Valid Expense expense, BindingResult result) {
         if (result.hasErrors()) {
             return "add-expense";
         }
-        expenseService.saveExpense(expenses);
+        expenseService.saveExpense(expense);
         return "redirect:/expenses";
     }
 
     @PostMapping("/add-expenses-category")
-    public String addExpensesCategory(@Valid ExpenseCategory expenseCategory, BindingResult result) {
+    public String addExpensesCategory(@Valid ExpenseCategory expenseCategory, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("categories", expenseCategoryRepository.findAll());
             return "expense-categories";
         }
 
@@ -74,8 +72,9 @@ public class ExpenseController extends BaseController {
 
     @PostMapping("/update-expenses-category")
     public String updateExpenseCategory(@Valid ExpenseCategory expenseCategory,
-                                        BindingResult result) {
+                                        BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("categories", expenseCategoryRepository.findAll());
             return "expense-categories";
         }
 
@@ -103,22 +102,15 @@ public class ExpenseController extends BaseController {
         return "update-expense";
     }
 
-
-    @GetMapping("/expenses-controller")
-    public String showIncomeList(Model model) {
-        model.addAttribute("expenses", expenseRepository.findAll());
-        return "expenses-controller";
-    }
-
     @PostMapping("/expense/edit/{id}")
-    public String updateExpense(@PathVariable("id") long id, @Valid Expense expenses,
-                                BindingResult result, Model model) {
+    public String updateExpense(@PathVariable("id") long id, @Valid Expense expense,
+                                BindingResult result) {
         if (result.hasErrors()) {
-            expenses.setId(id);
+            expense.setId(id);
             return "update-expense";
         }
 
-        expenseRepository.save(expenses);
+        expenseRepository.save(expense);
         return "redirect:/transactions";
     }
 

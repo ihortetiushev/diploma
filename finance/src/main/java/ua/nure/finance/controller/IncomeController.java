@@ -19,6 +19,7 @@ import ua.nure.finance.service.IncomeService;
 
 import java.time.LocalDate;
 
+@SuppressWarnings("unused")
 @Controller
 public class IncomeController extends BaseController {
 
@@ -96,7 +97,9 @@ public class IncomeController extends BaseController {
     public String updateIncome(@PathVariable("id") long id, @Valid Income income,
                                BindingResult result, Model model) {
         if (result.hasErrors()) {
-            income.setId(id);
+            model.addAttribute("categories", incomeCategoryRepository.findAll());
+            model.addAttribute("currencies", currencyRepository.findAll());
+            model.addAttribute("assets", assetRepository.findAll());
             return "update-income";
         }
 

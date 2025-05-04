@@ -28,18 +28,19 @@ public class Expense implements CategorizedAmount {
     @Column(name = "amount_main_currency", nullable = false)
     private BigDecimal amountMainCurrency;
 
-    @NotBlank(message = "Description is mandatory")
     private String description;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull(message = "Operation date is mandatory")
     private LocalDate operationDate;
-    @NotBlank(message = "Category is mandatory")
+
+    @NotNull(message = "Category is mandatory")
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private ExpenseCategory category;
 
     @ManyToOne
+    @NotNull(message = "Asset is mandatory")
     @JoinColumn(name = "asset_id", referencedColumnName = "id")
     private Asset asset;
 
