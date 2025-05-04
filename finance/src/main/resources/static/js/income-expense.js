@@ -7,9 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const selectedCurrency = currencySelect.value;
             if (selectedCurrency === 'UAH') {
                 amountMainField.value = amountField.value;
-                amountMainField.disabled = true;
+                amountMainField.readOnly = true;
+                amountMainField.setAttribute('tabindex', '-1');  // Prevent focus
             } else {
-                amountMainField.disabled = false;
+                amountMainField.readOnly = true;
+                amountMainField.removeAttribute('tabindex');
             }
         }
 
