@@ -171,7 +171,7 @@ public class AssetController {
     }
 
     private void processMono(MultipartFile file, Long assetId, Model model) {
-
+        System.out.println("Will be added");
     }
 
     @PostMapping("/import/confirm")

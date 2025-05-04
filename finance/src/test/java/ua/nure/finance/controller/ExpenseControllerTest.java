@@ -1,21 +1,13 @@
 package ua.nure.finance.controller;
 
-import jakarta.validation.Validator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.context.WebApplicationContext;
 import ua.nure.finance.model.Asset;
 import ua.nure.finance.model.Currency;
 import ua.nure.finance.model.Expense;
@@ -38,7 +30,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@Import(ExpenseControllerTest.ValidatorConfig.class)
 @WebMvcTest(ExpenseController.class)
 class ExpenseControllerTest {
 
@@ -62,22 +53,6 @@ class ExpenseControllerTest {
 
     @MockBean
     private AssetRepository assetRepository;
-
-    @Autowired
-    private Validator validator;
-
-    @BeforeEach
-    void setup(WebApplicationContext context) {
-        MockMvcBuilders.webAppContextSetup(context).build();
-    }
-
-    @TestConfiguration
-    static class ValidatorConfig {
-        @Bean
-        public Validator validator() {
-            return new LocalValidatorFactoryBean();
-        }
-    }
 
     @Test
     void testShowAddForm() throws Exception {
@@ -151,6 +126,7 @@ class ExpenseControllerTest {
                         .param("currency.currencyCode", "UAH")
                         .param("operationDate", LocalDate.now().toString())
                         .param("category.id", "1")
+                        .param("asset.id", "2")
                         .param("description", "some expense"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/expenses"));

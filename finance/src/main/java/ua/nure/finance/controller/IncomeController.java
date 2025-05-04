@@ -86,13 +86,6 @@ public class IncomeController extends BaseController {
         return "update-income";
     }
 
-    @GetMapping("/income-controller")
-    public String showIncomeList(Model model) {
-        model.addAttribute("incomes", incomeRepository.findAll());
-        return "income-controller";
-    }
-
-
     @PostMapping("/income/edit/{id}")
     public String updateIncome(@PathVariable("id") long id, @Valid Income income,
                                BindingResult result, Model model) {
