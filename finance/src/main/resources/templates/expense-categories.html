@@ -13,15 +13,15 @@
 <body>
 
 <div class="container mt-5">
-    <h2 class="mb-4">Expense Categories</h2>
+    <h2 class="mb-4">Категорії витрат</h2>
 
     <table class="table table-bordered">
         <thead class="table-light">
         <tr>
-            <th>Category Name</th>
+            <th>Назва категорії</th>
             <th>Keywords</th>
-            <th style="width: 100px;">Edit</th>
-            <th style="width: 100px;">Delete</th>
+            <th style="width: 100px;">Редагувати</th>
+            <th style="width: 100px;">Видалити</th>
         </tr>
         </thead>
         <tbody>
@@ -34,20 +34,20 @@
             <td>
                 <button class="btn btn-sm btn-warning"
                         th:onclick="showEditDialog([[${category.id}]], [[${category.name}]], [[${category.keywords}]])">
-                    Edit
+                    Редагувати
                 </button>
             </td>
             <td>
                 <button class="btn btn-sm btn-danger"
-                        th:onclick="showDeleteDialog('delete-expense-category', [[${category.id}]])">Delete
+                        th:onclick="showDeleteDialog('delete-expense-category', [[${category.id}]])">Видалити
                 </button>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <button class="btn btn-primary" onclick="showAddDialog()">Add Category</button>
-    <a th:href="@{/expenses}" class="btn btn-secondary">Go Back</a>
+    <button class="btn btn-primary" onclick="showAddDialog()">Додати категорію</button>
+    <a th:href="@{/expenses}" class="btn btn-secondary">Повернутися</a>
 </div>
 
 <!-- Add Dialog -->
@@ -59,14 +59,14 @@
             <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
         <div class="mb-3">
-            <label for="add-keywords" class="form-label">Keywords (comma separated)</label>
+            <label for="add-keywords" class="form-label">Ключові слова (розділення через кому)</label>
             <textarea th:field="*{keywords}"
                       id="add-keywords"
                       class="form-control form-control-sm"
                       rows="3"
                       placeholder="word1,word2,word3"></textarea>
         </div>
-        <button type="submit" class="btn btn-success">Add</button>
+        <button type="submit" class="btn btn-success">Додати</button>
     </form>
 </div>
 
@@ -75,19 +75,19 @@
     <form th:action="@{/update-expenses-category}" th:object="${expenseCategory}" method="post">
         <input type="hidden" th:field="*{id}" id="edit-id">
         <div class="mb-3">
-            <label for="edit-name" class="form-label">Name</label>
+            <label for="edit-name" class="form-label">Назва</label>
             <input type="text" th:field="*{name}" id="edit-name" class="form-control" placeholder="Name" required>
             <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
         <div class="mb-3">
-            <label for="edit-keywords" class="form-label">Keywords (comma separated)</label>
+            <label for="edit-keywords" class="form-label">Ключові слова (розділення через кому)</label>
             <textarea th:field="*{keywords}"
                       id="edit-keywords"
                       class="form-control form-control-sm"
                       rows="3"
                       placeholder="word1,word2,word3"></textarea>
         </div>
-        <button type="submit" class="btn btn-success">Save</button>
+        <button type="submit" class="btn btn-success">Зберегти</button>
     </form>
 </div>
 
@@ -95,7 +95,7 @@
 <div id="dialog-confirm" title="Delete Expense Category?" style="display:none;">
     <p>
         <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
-        Category will be deleted and cannot be recovered. Are you sure?
+        Категорію буде видалено, її неможливо буде відновити. Ви впевнені?
     </p>
 </div>
 

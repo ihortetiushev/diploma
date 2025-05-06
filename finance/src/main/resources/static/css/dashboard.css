@@ -40,15 +40,10 @@ body {
 }
 
 .sidebar nav ul li a {
-    color: blue;
     text-decoration: none;
     display: block;
     padding: 8px 12px;
     border-radius: 5px;
-}
-
-.sidebar nav ul li a:hover {
-   /* background-color: #2a2a40;*/
 }
 
 /* Main dashboard area */
@@ -69,10 +64,6 @@ body {
 
 .months button {
     margin-right: 5px;
-    /*padding: 6px 12px;
-    background-color: #2a2a40;*/
-    /*color: #ffffff;
-    border: none;*/
     border-radius: 5px;
     cursor: pointer;
 }
@@ -87,7 +78,6 @@ body {
 
 .topbar select {
     padding: 6px 10px;
-    /*background-color: #2a2a40;*/
     color: #ffffff;
     border: none;
     border-radius: 5px;
@@ -97,7 +87,6 @@ body {
 .summary-bar {
     display: flex;
     justify-content: space-around;
-    /*background-color: #1f1f2f;*/
     padding: 10px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -108,7 +97,7 @@ body {
 }
 
 .summary-bar .iae {
-    color: #45ff75;
+    color: #309759;
     font-weight: bold;
 }
 
@@ -213,4 +202,8 @@ th input {
 
 .footer-links a:hover {
     color: #ffffff;
+}
+
+a {
+    color: black;
 }

@@ -48,7 +48,6 @@
                 <li><a href="/income">Доходи</a></li>
                 <li><a href="/assets" class="active">Активи</a></li>
                 <li><a href="/transactions">Журнал транзакцій</a></li>
-                <li><a href="#">Налаштування</a></li>
             </ul>
         </nav>
     </aside>
@@ -69,41 +68,41 @@
                             <!-- Headers with sorting links -->
                             <th>
                                 <a th:href="@{/assets(sort='category.name', direction=${sort == 'category.name' and direction == 'asc' ? 'desc' : 'asc'}, categoryFilter=${categoryFilter}, nameFilter=${nameFilter}, currencyFilter=${currencyFilter})}">
-                                    Category
+                                    Категорія
                                     <span th:if="${sort == 'category.name'}"
                                           th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
                                 </a>
                             </th>
                             <th>
                                 <a th:href="@{/assets(sort='name', direction=${sort == 'name' and direction == 'asc' ? 'desc' : 'asc'}, categoryFilter=${categoryFilter}, nameFilter=${nameFilter}, currencyFilter=${currencyFilter})}">
-                                    Name
+                                    Назва
                                     <span th:if="${sort == 'name'}" th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
                                 </a>
                             </th>
                             <th>
                                 <a th:href="@{/assets(sort='currency.currencyCode', direction=${sort == 'currency.currencyCode' and direction == 'asc' ? 'desc' : 'asc'}, categoryFilter=${categoryFilter}, nameFilter=${nameFilter}, currencyFilter=${currencyFilter})}">
-                                    Currency
+                                    Валюта
                                     <span th:if="${sort == 'currency.currencyCode'}"
                                           th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
                                 </a>
                             </th>
                             <th>
                                 <a th:href="@{/assets(sort='initialValue', direction=${sort == 'initialValue' and direction == 'asc' ? 'desc' : 'asc'}, categoryFilter=${categoryFilter}, nameFilter=${nameFilter}, currencyFilter=${currencyFilter})}">
-                                    Initial Value
+                                    Початкова ціна
                                     <span th:if="${sort == 'initialValue'}"
                                           th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
                                 </a>
                             </th>
                             <th>
                                 <a th:href="@{/assets(sort='currentValue', direction=${sort == 'currentValue' and direction == 'asc' ? 'desc' : 'asc'}, categoryFilter=${categoryFilter}, nameFilter=${nameFilter}, currencyFilter=${currencyFilter})}">
-                                    Current Value
+                                    Поточна ціна
                                     <span th:if="${sort == 'currentValue'}"
                                           th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
                                 </a>
                             </th>
-                            <th>Quantity</th>
-                            <th>Description</th>
-                            <th colspan="3">Actions</th>
+                            <th>Кількість</th>
+                            <th>Опис</th>
+                            <th colspan="3">Дії</th>
                         </tr>
 
                         <tr>
