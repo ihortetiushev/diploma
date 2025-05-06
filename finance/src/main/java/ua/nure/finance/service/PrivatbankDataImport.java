@@ -30,12 +30,12 @@ public class PrivatbankDataImport {
     @Autowired
     private StatementImportService statementImportService;
 
-    private DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-    private final int HEADER_ROWS = 2;
-    private final int DATE_COLUMN_INDEX = 0;
-    private final int DESCRIPTION_COLUMN_INDEX = 3;
-    private final int AMOUNT_COLUMN_INDEX = 4;
-    private final int CURRENCY_COLUMN_INDEX = 5;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+    private static final int HEADER_ROWS = 2;
+    private static final int DATE_COLUMN_INDEX = 0;
+    private static final int DESCRIPTION_COLUMN_INDEX = 3;
+    private static final int AMOUNT_COLUMN_INDEX = 4;
+    private static final int CURRENCY_COLUMN_INDEX = 5;
 
     public BankStatementImportDTO importData(InputStream inputStream, Long assetId) throws IOException {
         Asset asset = assetRepository.findById(assetId)

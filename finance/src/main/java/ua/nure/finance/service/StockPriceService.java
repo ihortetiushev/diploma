@@ -1,5 +1,6 @@
 package ua.nure.finance.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -7,14 +8,15 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
 public class StockPriceService {
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final String apiKey = "T2M766DBVKNDWLHP";
+    private final RestTemplate restTemplate;
+    private static final String API_KEY = "T2M766DBVKNDWLHP";
 
     public BigDecimal fetchCurrentPrice(String ticker) {
-        String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + ticker + "&apikey=" + apiKey;
+        String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + ticker + "&apikey=" + API_KEY;
 
         try {
             ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);

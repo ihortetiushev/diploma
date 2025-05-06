@@ -27,7 +27,6 @@ public class Income implements CategorizedAmount {
     @Column(name = "amount_main_currency", nullable = false)
     private BigDecimal amountMainCurrency;
 
-    @NotBlank(message = "Description is mandatory")
     private String description;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -45,6 +44,7 @@ public class Income implements CategorizedAmount {
     private Currency currency;
 
     @ManyToOne
+    @NotNull(message = "Asset is mandatory")
     @JoinColumn(name = "asset_id", referencedColumnName = "id")
     private Asset asset;
 
