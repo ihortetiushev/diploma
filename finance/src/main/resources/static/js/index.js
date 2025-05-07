@@ -7,15 +7,16 @@ function drawChart() {
     data.addColumn('number', 'Slices');
     data.addRows(chartData);
     const options = {
-        width: 500,
-        height: 500,
-        is3D :true,
+        width: 450,
+        height: 450,
+        chartArea: {width: 450, height: 450},
+        is3D: true,
         backgroundColor: 'transparent'
     };
 
     const chart = new google.visualization.PieChart(document.getElementById('chart_div'));
     chart.draw(data, options);
-}
+ }
 
 function statistics() {
      $('#statistics-button').addClass('active')

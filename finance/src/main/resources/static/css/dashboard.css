@@ -2,7 +2,6 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /*background-color: #12121c;*/
     color: black;
 }
 
@@ -10,7 +9,7 @@ body {
 .container {
     display: flex;
     flex-direction: row-reverse; /* Sidebar on the right */
-    height: 100vh;
+    height: 88vh;
     color: black;
 }
 
@@ -54,7 +53,7 @@ body {
     flex-direction: column;
 }
 
-/* Topbar with months and year selector */
+/* Topbar */
 .topbar {
     display: flex;
     justify-content: space-between;
@@ -62,18 +61,8 @@ body {
     margin-bottom: 15px;
 }
 
-.months button {
-    margin-right: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 .sidebar nav ul li a.active {
     font-weight: bold;
-}
-
-.months button:hover {
-    /*background-color: #404060;*/
 }
 
 .topbar select {
@@ -111,8 +100,6 @@ body {
 
 /* Panels */
 .panel {
-    /*background-color: #1a1a2b;*/
-    border-radius: 10px;
     padding: 15px;
     overflow-y: auto;
 }
@@ -159,6 +146,12 @@ body {
     padding: 0;
     margin: 0;
     /*font-size: 20px;*/
+}
+
+.averages-panel {
+    height: 65vh;
+    overflow-y: auto;
+    border-left :
 }
 
 .averages-panel li {

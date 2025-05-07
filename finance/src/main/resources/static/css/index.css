@@ -9,16 +9,6 @@ body, html {
     height: 100%;
 }
 
-.balance-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: #ffffff;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease-in-out;
-}
-
 h1 {
     margin: 0;
     text-align: center;
@@ -26,35 +16,6 @@ h1 {
     font-size: 26px;
     font-weight: 600;
     margin-bottom: 20px;
-}
-
-.month-selector {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 30px 0;
-}
-
-.month-selector button {
-    background-color: #ffffff;
-    border: 2px solid #a4cbb0;
-    padding: 8px 20px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 20px;
-    transition: 0.3s ease;
-}
-
-.month-selector button:hover {
-    background-color: #a4cbb0;
-    color: white;
-}
-
-.month-selector span {
-    margin: 0 20px;
-    font-weight: bold;
-    font-size: 18px;
-    color: #2e2e2e;
 }
 
 .navigation {
@@ -93,7 +54,7 @@ h1 {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
-.panel {
+.averages-panel {
     border-left: 3px solid black;
 }
 
@@ -160,7 +121,6 @@ h1 {
     padding: 5px 10px;
     background: black;
     color: white;
-    /*border-radius: 15px;*/
     text-align: center;
     font-weight: bold;
     transition: background 0.3s ease-in-out;
