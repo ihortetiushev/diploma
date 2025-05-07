@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Assets Categories</title>
+    <title>Категорії активів</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
@@ -14,14 +14,14 @@
 <body>
 
 <div class="container mt-5">
-    <h2 class="mb-4">Assets Categories</h2>
+    <h2 class="mb-4">Категорії активів</h2>
 
     <table class="table table-bordered">
         <thead class="table-light">
         <tr>
-            <th>Category Name</th>
-            <th style="width: 100px;">Edit</th>
-            <th style="width: 100px;">Delete</th>
+            <th>Назва категорії</th>
+            <th style="width: 100px;">Редагувати</th>
+            <th style="width: 100px;">Видалити</th>
         </tr>
         </thead>
         <tbody>
@@ -29,42 +29,43 @@
             <td colspan="3" class="text-center">No data</td>
         </tr>
         <tr th:each="category : ${categories}">
-            <td><span th:text="${category.name}">Name</span></td>
+            <td><span th:text="${category.name}">Назва</span></td>
             <td>
                 <span th:if="${category.readOnly}" title="На цю категорію зав'язана бізнес-логіка. Ії не можна редагувати">
-                    <button class="btn btn-sm btn-warning" disabled>Edit</button>
+                    <button class="btn btn-sm btn-warning" disabled>Редагувати</button>
                 </span>
                 <button class="btn btn-sm btn-warning" th:onclick="showEditDialog([[${category.id}]], [[${category.name}]])"
                         th:if="${!category.readOnly}">
-                    Edit
+                    Редагувати
                 </button>
             </td>
             <td>
-                <span th:if="${category.readOnly}" title="На цю категорію зав'язана бізнес-логіка. Ії не можна видаляти">
-                    <button class="btn btn-sm btn-danger" disabled>Delete</button>
+                <span th:if="${category.readOnly}" title="На цю категорію зав'язана бізнес-логіка. Її не можна видаляти">
+                    <button class="btn btn-sm btn-danger" disabled>Видалити</button>
                 </span>
                 <button class="btn btn-sm btn-danger" th:onclick="showDeleteDialog('assets-categories/delete', [[${category.id}]])"
                         th:if="${!category.readOnly}">
-                    Delete
+                    Видалити
+
                 </button>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <button class="btn btn-primary" onclick="showAddDialog()">Add Category</button>
-    <a th:href="@{/assets}" class="btn btn-secondary">Go Back</a>
+    <button class="btn btn-primary" onclick="showAddDialog()">Додати категорію</button>
+    <a th:href="@{/assets}" class="btn btn-secondary">Повернутися</a>
 </div>
 
 <!-- Add Dialog -->
 <div id="add-dialog" title="Add Assets Category" style="display:none;">
     <form th:action="@{/assets-categories/save}" th:object="${category}" method="post">
         <div class="mb-3">
-            <label for="add-name" class="form-label">Name</label>
-            <input type="text" th:field="*{name}" id="add-name" class="form-control" placeholder="Name" required>
+            <label for="add-name" class="form-label">Назва</label>
+            <input type="text" th:field="*{name}" id="add-name" class="form-control" placeholder="Назва" required>
             <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
-        <button type="submit" class="btn btn-success">Add</button>
+        <button type="submit" class="btn btn-success">Додати</button>
     </form>
 </div>
 
@@ -73,11 +74,11 @@
     <form th:action="@{/assets-categories/save}" th:object="${category}" method="post">
         <input type="hidden" th:field="*{id}" id="edit-id">
         <div class="mb-3">
-            <label for="edit-name" class="form-label">Name</label>
-            <input type="text" th:field="*{name}" id="edit-name" class="form-control" placeholder="Name" required>
+            <label for="edit-name" class="form-label">Назва</label>
+            <input type="text" th:field="*{name}" id="edit-name" class="form-control" placeholder="Назва" required>
             <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
-        <button type="submit" class="btn btn-success">Save</button>
+        <button type="submit" class="btn btn-success">Зберегти</button>
     </form>
 </div>
 
@@ -85,7 +86,7 @@
 <div id="dialog-confirm" title="Delete Assets Category?" style="display:none;">
     <p>
         <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
-        Category will be deleted and cannot be recovered. Are you sure?
+        Категорію буде видалено, її неможливо буде відновити. Ви впевнені?
     </p>
 </div>
 

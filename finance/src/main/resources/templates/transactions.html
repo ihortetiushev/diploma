@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Transaction Journal</title>
+    <title>Журнал Операцій</title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
@@ -62,8 +62,8 @@
                 <div>
                     <select name="typeFilter" id="typeFilter" class="btn btn-outline-secondary dropdown-toggle">
                         <option value="">-- Всі --</option>
-                        <option value="INCOME" th:selected="${typeFilter == 'INCOME'}">INCOME</option>
-                        <option value="EXPENSE" th:selected="${typeFilter == 'EXPENSE'}">EXPENSE</option>
+                        <option value="INCOME" th:selected="${typeFilter == 'INCOME'}">ДОХОДИ</option>
+                        <option value="EXPENSE" th:selected="${typeFilter == 'EXPENSE'}">ВИТРАТИ</option>
                     </select>
                 </div>
                 <div class="input-group-prepend">
@@ -133,7 +133,7 @@
                         </thead>
                         <tbody>
                         <tr th:if="${transactions.empty}">
-                            <td colspan="9">No transactions found.</td>
+                            <td colspan="9">Транзакцій не знайдено</td>
                         </tr>
                         <tr th:each="transaction : ${transactions}">
                             <td th:text="${transaction.type}"></td>

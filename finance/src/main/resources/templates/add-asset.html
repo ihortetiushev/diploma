@@ -62,23 +62,23 @@
             <div class="mb-3">
                 <label for="quantity" class="form-label">Кількість</label>
                 <input type="number" th:field="*{quantity}" step="1" id="quantity" class="form-control"
-                       placeholder="e.g., 10">
+                       placeholder="напр., 10">
             </div>
 
             <div class="mb-3">
                 <label for="stockExchange" class="form-label">Фондова біржа</label>
                 <input type="text" th:field="*{stockExchange}" id="stockExchange" class="form-control"
-                       placeholder="e.g., NASDAQ">
+                       placeholder="напр., NASDAQ">
             </div>
 
             <div class="mb-3">
                 <label for="initialPricePerShare" class="form-label">Ціна за акцію</label>
                 <input type="number" th:field="*{initialPricePerShare}" id="initialPricePerShare" step="0.0001"
-                       class="form-control" placeholder="e.g., 95.75">
+                       class="form-control" placeholder="напр., 95.75">
             </div>
         </div>
         <div class="mb-3">
-            <label for="startDate" class="form-label">Start Date</label>
+            <label for="startDate" class="form-label">Дата початку</label>
             <input type="date" th:field="*{startDate}" id="startDate" class="form-control" placeholder="Start Date"
                    required>
             <div class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>
