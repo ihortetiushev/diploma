@@ -60,7 +60,8 @@
                     <span class="input-group-text">Тип</span>
                 </div>
                 <div>
-                    <select name="typeFilter" id="typeFilter" class="btn btn-outline-secondary dropdown-toggle">
+                    <select name="typeFilter" id="typeFilter" class="btn btn-outline-secondary dropdown-toggle"
+                            style="background-color: #d1d1d1; color: black;">
                         <option value="">-- Всі --</option>
                         <option value="INCOME" th:selected="${typeFilter == 'INCOME'}">ДОХОДИ</option>
                         <option value="EXPENSE" th:selected="${typeFilter == 'EXPENSE'}">ВИТРАТИ</option>
@@ -78,7 +79,8 @@
                     <span class="input-group-text">Категорія</span>
                 </div>
                 <div>
-                    <select name="categoryFilter" class="btn btn-outline-secondary dropdown-toggle">
+                    <select name="categoryFilter" class="btn btn-outline-secondary dropdown-toggle"
+                            style="background-color: #d1d1d1; color: black;">
                         <option value="">-- Всі --</option>
                         <option th:each="name : ${categoryNames}"
                                 th:value="${name}"
@@ -91,7 +93,8 @@
                     <span class="input-group-text">Валюта</span>
                 </div>
                 <div>
-                    <select name="currencyFilter" id="currencyFilter" class="btn btn-outline-secondary dropdown-toggle">
+                    <select name="currencyFilter" id="currencyFilter" class="btn btn-outline-secondary dropdown-toggle"
+                            style="background-color: #d1d1d1; color: black;">
                         <option value="">-- Всі --</option>
                         <option th:each="currency : ${currencies}" th:text="${currency.currencyCode}"
                                 th:selected="${currencyFilter == currency.currencyCode}"
@@ -102,7 +105,8 @@
                     <span class="input-group-text">Актив</span>
                 </div>
                 <div>
-                    <select name="assetFilter" id="assetFilter" class="btn btn-outline-secondary dropdown-toggle">
+                    <select name="assetFilter" id="assetFilter" class="btn btn-outline-secondary dropdown-toggle"
+                            style="background-color: #d1d1d1; color: black;">
                         <option value="">-- Всі --</option>
                         <option th:each="asset : ${assets}" th:text="${asset.name}"
                                 th:selected="${assetFilter == asset.id}"

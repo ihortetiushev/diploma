@@ -2,7 +2,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 20px;
-    background: #e3f7dd;
+    background: #f5fff5;
 }
 body, html {
     overflow-x: hidden;
@@ -12,7 +12,6 @@ body, html {
 h1 {
     margin: 0;
     text-align: center;
-    /*color: #2f4f4f;*/
     font-size: 26px;
     font-weight: 600;
     margin-bottom: 20px;
@@ -127,7 +126,7 @@ h1 {
 }
 
 .btn:hover {
-    background: #e1bd09;
+    background: lightgray;
     color: black
 }
 
@@ -139,7 +138,7 @@ h1 {
 
 .footer-links a:hover {
     color: black;
-    background-color: #e1bd09;
+    background-color: lightgray;
     text-decoration: none;
     transition: color 0.2s;
 }

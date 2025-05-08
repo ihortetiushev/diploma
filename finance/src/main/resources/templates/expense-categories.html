@@ -51,11 +51,11 @@
 </div>
 
 <!-- Add Dialog -->
-<div id="add-dialog" title="Add Expense Category" style="display:none;">
+<div id="add-dialog" title="Додайте категорію витрат" style="display:none;">
     <form th:action="@{/add-expenses-category}" th:object="${expenseCategory}" method="post">
         <div class="mb-3">
             <label for="add-name" class="form-label">Назва</label>
-            <input type="text" th:field="*{name}" id="add-name" class="form-control" placeholder="Name" required>
+            <input type="text" th:field="*{name}" id="add-name" class="form-control" placeholder="Назва" required>
             <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
         <div class="mb-3">
@@ -71,7 +71,7 @@
 </div>
 
 <!-- Edit Dialog -->
-<div id="edit-dialog" title="Edit Expense Category" style="display:none;">
+<div id="edit-dialog" title="Редагувати категорію витрат" style="display:none;">
     <form th:action="@{/update-expenses-category}" th:object="${expenseCategory}" method="post">
         <input type="hidden" th:field="*{id}" id="edit-id">
         <div class="mb-3">
