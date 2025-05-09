@@ -21,24 +21,6 @@
     </p>
 </div>
 
-<div id="import-dialog" title="Імпортування даних з банковської виписки" style="display:none;">
-    <form id="uploadForm" th:action="@{/assets/import}" method="post" enctype="multipart/form-data" class="mb-4">
-        <div class="mb-3">
-            <label for="file" class="form-label">Оберіть файл</label>
-            <input type="file" class="form-control" id="file" name="file" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="fileType" class="form-label">Тип виписки</label>
-            <select class="form-select" id="fileType" name="fileType" required>
-                <option value="privatbank">Приватбанк</option>
-                <option value="monobank">Monobank</option>
-            </select>
-        </div>
-        <input type="hidden" name="assetId" id="assetId">
-    </form>
-</div>
-
 <div class="container">
     <aside class="sidebar">
         <h3>Персональні фінанси</h3>
@@ -52,12 +34,10 @@
         </nav>
     </aside>
 
-
     <main class="dashboard-content">
         <header class="topbar">
 
         </header>
-
 
         <section>
             <div>
