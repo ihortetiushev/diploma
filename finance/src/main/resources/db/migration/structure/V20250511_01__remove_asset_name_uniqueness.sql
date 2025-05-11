@@ -1,0 +1,1 @@
+ALTER TABLE assets drop CONSTRAINT uq_assets_name;
