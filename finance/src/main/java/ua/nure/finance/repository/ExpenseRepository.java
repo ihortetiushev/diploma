@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ExpenseRepository extends CrudRepository<Expense, Long> {
     List<Expense> findByOperationDateBetween(LocalDate startDate, LocalDate endDate);
+    List<Expense> findByAsset_PrimaryAccountTrueAndOperationDateBetween(LocalDate startDate, LocalDate endDate);
 }

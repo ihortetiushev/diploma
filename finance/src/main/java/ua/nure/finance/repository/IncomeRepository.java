@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface IncomeRepository extends CrudRepository<Income, Long> {
     List<Income> findByOperationDateBetween(LocalDate startDate, LocalDate endDate);
+    List<Income> findByAsset_PrimaryAccountTrueAndOperationDateBetween(LocalDate startDate, LocalDate endDate);
 }
