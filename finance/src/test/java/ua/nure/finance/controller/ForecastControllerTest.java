@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
@@ -43,7 +44,7 @@ class ForecastControllerTest {
         LocalDate startDate = lastCompletedMonth.minusMonths(5).atDay(1);
         LocalDate endDate = lastCompletedMonth.atEndOfMonth();
         Income firstIncome = new Income();
-        firstIncome.setOperationDate(lastCompletedMonth.atDay(1));
+        firstIncome.setOperationDate(startDate);
         firstIncome.setAmountMainCurrency(new BigDecimal("100.25"));
         Income secondIncome = new Income();
         secondIncome.setOperationDate(endDate);
@@ -60,7 +61,23 @@ class ForecastControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("forecast"))
                 .andExpect(model().attribute("months", hasSize(6)))
-                .andExpect(content().string(containsString("125.50")))
-                .andExpect(content().string(containsString("40.00")));
+                .andExpect(content().string(containsString("25.25")))
+                .andExpect(content().string(containsString("40.00")))
+                .andExpect(result -> {
+                    List<?> months = (List<?>) result.getModelAndView().getModel().get("months");
+                    ForecastController.ForecastMonth firstMonth =
+                            (ForecastController.ForecastMonth) months.get(0);
+                    ForecastController.ForecastMonth secondMonth =
+                            (ForecastController.ForecastMonth) months.get(1);
+                    ForecastController.ForecastMonth lastMonth =
+                            (ForecastController.ForecastMonth) months.get(5);
+
+                    assertEquals(0, firstMonth.getSmoothedIncome().compareTo(new BigDecimal("100.25")));
+                    assertEquals(0, secondMonth.getSmoothedIncome().compareTo(new BigDecimal("60.150")));
+                    assertEquals(0, lastMonth.getSmoothedIncome().compareTo(new BigDecimal("17.89")));
+                    assertEquals(2, lastMonth.getSmoothedIncome().scale());
+                    assertEquals(0, lastMonth.getSmoothedExpenses().compareTo(new BigDecimal("16.00")));
+                    assertEquals(2, lastMonth.getSmoothedExpenses().scale());
+                });
     }
 }

@@ -28,18 +28,18 @@
             <tr>
                 <th>Місяць</th>
                 <th>Фактичний дохід</th>
-                <th>Згладження</th>
+                <th>Згладжене значення доходів</th>
                 <th>Витрати</th>
-                <th>Згладжене значення</th>
+                <th>Згладжене значення витрат</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="month : ${months}">
                 <td th:text="${month.month}"></td>
                 <td th:text="${month.actualIncome}"></td>
-                <td></td>
+                <td th:text="${month.smoothedIncome}"></td>
                 <td th:text="${month.expenses}"></td>
-                <td></td>
+                <td th:text="${month.smoothedExpenses}"></td>
             </tr>
             </tbody>
         </table>
