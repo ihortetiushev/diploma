@@ -113,7 +113,10 @@
                         </tr>
                         <tr th:each="asset : ${assets}">
                             <td><span th:text="${asset.category.name}"></span></td>
-                            <td><span th:text="${asset.name}"></span></td>
+                            <td>
+                                <span th:text="${asset.name}"></span>
+                                <span th:if="${asset.primaryAccount}" class="badge rounded-pill text-bg-primary">Основний рахунок</span>
+                            </td>
                             <td><span th:text="${asset.currency.currencyCode}"></span></td>
                             <td><span th:text="${asset.initialValue}"></span></td>
                             <td><span th:text="${asset.currentValue}"></span></td>

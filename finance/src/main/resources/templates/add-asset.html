@@ -19,9 +19,16 @@
             <select th:field="*{category}" id="category" class="form-select" required>
                 <option value="-1">-- Обрати категорію --</option>
                 <option th:each="category : ${categories}" th:value="${category.id}"
+                        th:data-account-category="${category.name == 'Рахунки'}"
                         th:text="${category.name}"></option>
             </select>
             <div class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+        </div>
+
+        <div class="form-check mb-3 d-none" id="primaryAccountGroup">
+            <input type="checkbox" th:field="*{primaryAccount}" class="form-check-input">
+            <label for="primaryAccount" class="form-check-label">Основний рахунок</label>
+            <div class="text-danger" th:if="${#fields.hasErrors('primaryAccount')}" th:errors="*{primaryAccount}"></div>
         </div>
 
         <div class="mb-3">
@@ -90,4 +97,3 @@
 </div>
 </body>
 </html>
-

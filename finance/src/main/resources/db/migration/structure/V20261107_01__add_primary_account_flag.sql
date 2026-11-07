@@ -1,0 +1,2 @@
+ALTER TABLE assets
+    ADD COLUMN is_primary_account BOOLEAN NOT NULL DEFAULT FALSE;

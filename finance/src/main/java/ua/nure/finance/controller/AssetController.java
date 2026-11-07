@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.nure.finance.model.*;
@@ -104,17 +105,22 @@ public class AssetController {
         Currency defaultCurrency = new Currency();
         defaultCurrency.setCurrencyCode("UAH");
         asset.setCurrency(defaultCurrency);
-        model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("currencies", currencyRepository.findAll());
+        populateAssetForm(model);
         return "add-asset";
     }
 
     @PostMapping("/add-asset")
-    public String addAsset(@Valid Asset asset, BindingResult result) {
+    @Transactional
+    public String addAsset(@Valid Asset asset, BindingResult result, Model model) {
+        validatePrimaryAccount(asset, result);
         if (result.hasErrors()) {
+            populateAssetForm(model);
             return "add-asset";
         }
 
+        if (asset.isPrimaryAccount()) {
+            clearPrimaryAccount(null);
+        }
         assetRepository.save(asset);
         return "redirect:/assets";
     }
@@ -124,19 +130,24 @@ public class AssetController {
         Asset asset = assetRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid asset id Id:" + id));
         model.addAttribute("asset", asset);
-        model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("currencies", currencyRepository.findAll());
+        populateAssetForm(model);
         return "update-asset";
     }
 
     @PostMapping("/edit/{id}")
+    @Transactional
     public String updateAsset(@PathVariable Long id, @ModelAttribute("asset") Asset updatedAsset,
-                              BindingResult result) {
+                              BindingResult result, Model model) {
+        validatePrimaryAccount(updatedAsset, result);
         if (result.hasErrors()) {
             updatedAsset.setId(id);
+            populateAssetForm(model);
             return "update-asset";
         }
 
+        if (updatedAsset.isPrimaryAccount()) {
+            clearPrimaryAccount(id);
+        }
         assetRepository.save(updatedAsset);
         return "redirect:/assets";
     }
@@ -146,8 +157,33 @@ public class AssetController {
         Asset asset = assetRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid asset Id:" + id));
         asset.setStatus(Asset.Status.closed);
+        asset.setPrimaryAccount(false);
         assetRepository.save(asset);
         return "redirect:/assets";
+    }
+
+    private void populateAssetForm(Model model) {
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("currencies", currencyRepository.findAll());
+    }
+
+    private void validatePrimaryAccount(Asset asset, BindingResult result) {
+        if (asset.isPrimaryAccount() && (asset.getCategory() == null || asset.getCategory().getId() == null
+                || categoryRepository.findById(asset.getCategory().getId())
+                .map(category -> !"Рахунки".equals(category.getName()))
+                .orElse(true))) {
+            result.rejectValue("primaryAccount", "asset.primaryAccount.accountOnly",
+                    "Основним можна позначити лише актив категорії «Рахунки»");
+        }
+    }
+
+    private void clearPrimaryAccount(Long exceptAssetId) {
+        for (Asset asset : assetRepository.findByPrimaryAccountTrue()) {
+            if (!asset.getId().equals(exceptAssetId)) {
+                asset.setPrimaryAccount(false);
+                assetRepository.save(asset);
+            }
+        }
     }
 
     @PostMapping("/import")

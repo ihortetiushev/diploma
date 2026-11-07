@@ -24,8 +24,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -117,6 +120,36 @@ public class AssetControllerTest {
                 .andExpect(redirectedUrl("/assets"));
 
         verify(assetRepository).save(any(Asset.class));
+    }
+
+    @Test
+    void testAddPrimaryAccountClearsPreviousPrimaryAccount() throws Exception {
+        AssetCategory accountCategory = new AssetCategory();
+        accountCategory.setId(1L);
+        accountCategory.setName("Рахунки");
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(accountCategory));
+
+        Asset existingPrimaryAccount = new Asset();
+        existingPrimaryAccount.setId(2L);
+        existingPrimaryAccount.setPrimaryAccount(true);
+        when(assetRepository.findByPrimaryAccountTrue()).thenReturn(List.of(existingPrimaryAccount));
+
+        mockMvc.perform(post("/assets/add-asset")
+                        .param("initialValue", "1000.00")
+                        .param("currency.currencyCode", "UAH")
+                        .param("name", "Main account")
+                        .param("description", "Bank account")
+                        .param("category.id", "1")
+                        .param("startDate", "2024-01-01")
+                        .param("status", "active")
+                        .param("primaryAccount", "true"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/assets"));
+
+        assertFalse(existingPrimaryAccount.isPrimaryAccount());
+        verify(assetRepository).save(existingPrimaryAccount);
+        verify(assetRepository).save(argThat(Asset::isPrimaryAccount));
+        verify(assetRepository, times(2)).save(any(Asset.class));
     }
 
 

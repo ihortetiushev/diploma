@@ -53,6 +53,9 @@ public class Asset {
     @Column(nullable = false)
     private Status status = Status.active;
 
+    @Column(name = "is_primary_account", nullable = false)
+    private boolean primaryAccount;
+
     @Column(name = "initial_price_per_share", precision = 19, scale = 4)
     private BigDecimal initialPricePerShare;
 
