@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Прогноз</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link th:href="@{/css/index.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+    <aside class="sidebar">
+        <h3>Персональні фінанси</h3>
+        <nav>
+            <ul>
+                <li><a href="/">Витрати</a></li>
+                <li><a href="/income">Доходи</a></li>
+                <li><a href="/assets">Активи</a></li>
+                <li><a href="/transactions">Журнал транзакцій</a></li>
+                <li><a href="/forecast" class="active">Прогноз</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="dashboard-content"></main>
+</div>
+</body>
+</html>
