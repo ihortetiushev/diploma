@@ -50,19 +50,27 @@ class ForecastControllerTest {
         secondIncome.setOperationDate(endDate);
         secondIncome.setAmountMainCurrency(new BigDecimal("25.25"));
         Expense expense = new Expense();
-        expense.setOperationDate(endDate);
-        expense.setAmountMainCurrency(new BigDecimal("40.00"));
+        expense.setOperationDate(startDate);
+        expense.setAmountMainCurrency(new BigDecimal("24000.00"));
+        Expense secondExpense = new Expense();
+        secondExpense.setOperationDate(startDate.plusMonths(1));
+        secondExpense.setAmountMainCurrency(new BigDecimal("25000.00"));
+        Expense lastExpense = new Expense();
+        lastExpense.setOperationDate(endDate);
+        lastExpense.setAmountMainCurrency(new BigDecimal("40.00"));
         when(incomeRepository.findByAsset_PrimaryAccountTrueAndOperationDateBetween(
                 startDate, endDate)).thenReturn(List.of(firstIncome, secondIncome));
         when(expenseRepository.findByAsset_PrimaryAccountTrueAndOperationDateBetween(
-                startDate, endDate)).thenReturn(List.of(expense));
+                startDate, endDate)).thenReturn(List.of(expense, secondExpense, lastExpense));
 
         mockMvc.perform(get("/forecast"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("forecast"))
                 .andExpect(model().attribute("months", hasSize(6)))
                 .andExpect(content().string(containsString("25.25")))
+                .andExpect(content().string(containsString("24300.00")))
                 .andExpect(content().string(containsString("40.00")))
+                .andExpect(content().string(containsString("17.89")))
                 .andExpect(result -> {
                     List<?> months = (List<?>) result.getModelAndView().getModel().get("months");
                     ForecastController.ForecastMonth firstMonth =
@@ -76,7 +84,9 @@ class ForecastControllerTest {
                     assertEquals(0, secondMonth.getSmoothedIncome().compareTo(new BigDecimal("60.150")));
                     assertEquals(0, lastMonth.getSmoothedIncome().compareTo(new BigDecimal("17.89")));
                     assertEquals(2, lastMonth.getSmoothedIncome().scale());
-                    assertEquals(0, lastMonth.getSmoothedExpenses().compareTo(new BigDecimal("16.00")));
+                    assertEquals(0, secondMonth.getSmoothedExpenses().compareTo(new BigDecimal("24300.00")));
+                    assertEquals(2, secondMonth.getSmoothedExpenses().scale());
+                    assertEquals(0, lastMonth.getSmoothedExpenses().compareTo(new BigDecimal("5846.43")));
                     assertEquals(2, lastMonth.getSmoothedExpenses().scale());
                 });
     }

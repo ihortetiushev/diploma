@@ -25,8 +25,10 @@ public class ForecastController {
 
     private final IncomeRepository incomeRepository;
     private final ExpenseRepository expenseRepository;
-    private static final BigDecimal CURRENT_MONTH_WEIGHT = new BigDecimal("0.4");
-    private static final BigDecimal PREVIOUS_MONTH_WEIGHT = new BigDecimal("0.6");
+    private static final BigDecimal INCOME_CURRENT_MONTH_WEIGHT = new BigDecimal("0.4");
+    private static final BigDecimal INCOME_PREVIOUS_MONTH_WEIGHT = new BigDecimal("0.6");
+    private static final BigDecimal EXPENSE_CURRENT_MONTH_WEIGHT = new BigDecimal("0.3");
+    private static final BigDecimal EXPENSE_PREVIOUS_MONTH_WEIGHT = new BigDecimal("0.7");
 
     @Autowired
     public ForecastController(IncomeRepository incomeRepository, ExpenseRepository expenseRepository) {
@@ -59,8 +61,10 @@ public class ForecastController {
             YearMonth month = lastCompletedMonth.minusMonths(5L - index);
             BigDecimal actualIncome = monthlyIncome.getOrDefault(month, BigDecimal.ZERO);
             BigDecimal actualExpenses = monthlyExpenses.getOrDefault(month, BigDecimal.ZERO);
-            BigDecimal smoothedIncome = smooth(actualIncome, previousSmoothedIncome);
-            BigDecimal smoothedExpenses = smooth(actualExpenses, previousSmoothedExpenses);
+            BigDecimal smoothedIncome = smooth(actualIncome, previousSmoothedIncome,
+                    INCOME_CURRENT_MONTH_WEIGHT, INCOME_PREVIOUS_MONTH_WEIGHT);
+            BigDecimal smoothedExpenses = smooth(actualExpenses, previousSmoothedExpenses,
+                    EXPENSE_CURRENT_MONTH_WEIGHT, EXPENSE_PREVIOUS_MONTH_WEIGHT);
             months.add(new ForecastMonth(month.format(monthFormatter), actualIncome, smoothedIncome,
                     actualExpenses, smoothedExpenses));
             previousSmoothedIncome = smoothedIncome;
@@ -68,6 +72,9 @@ public class ForecastController {
         }
 
         model.addAttribute("months", months);
+        model.addAttribute("forecastSmoothedIncome", previousSmoothedIncome);
+        model.addAttribute("forecastSmoothedExpenses", previousSmoothedExpenses);
+        model.addAttribute("forecastBalance", previousSmoothedIncome.subtract(previousSmoothedExpenses));
         return "forecast";
     }
 
@@ -79,12 +86,13 @@ public class ForecastController {
         return totals;
     }
 
-    private BigDecimal smooth(BigDecimal actualValue, BigDecimal previousSmoothedValue) {
+    private BigDecimal smooth(BigDecimal actualValue, BigDecimal previousSmoothedValue,
+                              BigDecimal currentMonthWeight, BigDecimal previousMonthWeight) {
         if (previousSmoothedValue == null) {
             return actualValue.setScale(2, RoundingMode.HALF_UP);
         }
-        return actualValue.multiply(CURRENT_MONTH_WEIGHT)
-                .add(previousSmoothedValue.multiply(PREVIOUS_MONTH_WEIGHT))
+        return actualValue.multiply(currentMonthWeight)
+                .add(previousSmoothedValue.multiply(previousMonthWeight))
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
