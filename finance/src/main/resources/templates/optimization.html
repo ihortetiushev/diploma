@@ -24,6 +24,86 @@
     </aside>
     <main class="dashboard-content">
         <h1>Оптимізація</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th scope="col">Категорія</th>
+                    <th scope="col">Обмеження</th>
+                    <th scope="col">Пріоритет</th>
+                    <th scope="col">Бажано</th>
+                    <th scope="col">Оптимум</th>
+                    <th scope="col">Факт</th>
+                    <th scope="col">Відхилення</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><input class="form-control" type="text" name="categories[0].name"
+                               value="Необов'язкові витрати" aria-label="Категорія: необов'язкові витрати"></td>
+                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[0].limit"
+                               aria-label="Обмеження: необхідні витрати"></td>
+                    <td><input class="form-control" type="number" min="1" step="1" name="categories[0].priority"
+                               aria-label="Пріоритет: необхідні витрати"></td>
+                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[0].desired"
+                               aria-label="Бажано: необхідні витрати"></td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                </tr>
+                <tr>
+                    <td><input class="form-control" type="text" name="categories[1].name"
+                               value="Розваги" aria-label="Категорія: розваги"></td>
+                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[1].limit"
+                               aria-label="Обмеження: розваги"></td>
+                    <td><input class="form-control" type="number" min="1" step="1" name="categories[1].priority"
+                               aria-label="Пріоритет: розваги"></td>
+                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[1].desired"
+                               aria-label="Бажано: розваги"></td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                </tr>
+                <tr>
+                    <td><input class="form-control" type="text" name="categories[2].name"
+                               value="Заощадження" aria-label="Категорія: заощадження"></td>
+                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[2].limit"
+                               aria-label="Обмеження: заощадження"></td>
+                    <td><input class="form-control" type="number" min="1" step="1" name="categories[2].priority"
+                               aria-label="Пріоритет: заощадження"></td>
+                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[2].desired"
+                               aria-label="Бажано: заощадження"></td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                </tr>
+                <tr>
+                    <td><input class="form-control" type="text" name="categories[3].name"
+                               value="Різне" aria-label="Категорія: різне"></td>
+                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[3].limit"
+                               aria-label="Обмеження: різне"></td>
+                    <td><input class="form-control" type="number" min="1" step="1" name="categories[3].priority"
+                               aria-label="Пріоритет: різне"></td>
+                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[3].desired"
+                               aria-label="Бажано: різне"></td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                </tr>
+                </tbody>
+                <tfoot class="table-light">
+                <tr>
+                    <th scope="row">Разом</th>
+                    <td class="text-center">—</td>
+                    <td></td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                    <td class="text-center">—</td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
     </main>
 </div>
 </body>

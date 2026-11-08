@@ -18,10 +18,15 @@ class OptimizationControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void getOptimizationDisplaysEmptyOptimizationPage() throws Exception {
+    void getOptimizationDisplaysEditableCategoryTable() throws Exception {
         mockMvc.perform(get("/optimization"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("optimization"))
-                .andExpect(content().string(containsString("Оптимізація")));
+                .andExpect(content().string(containsString("Оптимізація")))
+                .andExpect(content().string(containsString("Бажано")))
+                .andExpect(content().string(containsString("Відхилення")))
+                .andExpect(content().string(containsString("name=\"categories[0].priority\"")))
+                .andExpect(content().string(containsString("value=\"Заощадження\"")))
+                .andExpect(content().string(containsString("Разом")));
     }
 }
