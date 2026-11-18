@@ -24,6 +24,9 @@
     </aside>
     <main class="dashboard-content">
         <h1>Оптимізація</h1>
+        <div class="alert alert-success" role="status" th:if="${saved}">Дані збережено.</div>
+        <div class="alert alert-danger" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+        <form method="post" th:action="@{/optimization}" th:object="${settings}">
         <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
@@ -32,79 +35,62 @@
                     <th scope="col">Обмеження</th>
                     <th scope="col">Пріоритет</th>
                     <th scope="col">Бажано</th>
-                    <th scope="col">Оптимум</th>
-                    <th scope="col">Факт</th>
+                    <th scope="col">Оптимально</th>
+                    <th scope="col">Результат</th>
                     <th scope="col">Відхилення</th>
+                    <th scope="col">Дії</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td><input class="form-control" type="text" name="categories[0].name"
-                               value="Необов'язкові витрати" aria-label="Категорія: необов'язкові витрати"></td>
-                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[0].limit"
-                               aria-label="Обмеження: необхідні витрати"></td>
-                    <td><input class="form-control" type="number" min="1" step="1" name="categories[0].priority"
-                               aria-label="Пріоритет: необхідні витрати"></td>
-                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[0].desired"
-                               aria-label="Бажано: необхідні витрати"></td>
-                    <td class="text-center">—</td>
-                    <td class="text-center">—</td>
-                    <td class="text-center">—</td>
-                </tr>
-                <tr>
-                    <td><input class="form-control" type="text" name="categories[1].name"
-                               value="Розваги" aria-label="Категорія: розваги"></td>
-                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[1].limit"
-                               aria-label="Обмеження: розваги"></td>
-                    <td><input class="form-control" type="number" min="1" step="1" name="categories[1].priority"
-                               aria-label="Пріоритет: розваги"></td>
-                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[1].desired"
-                               aria-label="Бажано: розваги"></td>
-                    <td class="text-center">—</td>
-                    <td class="text-center">—</td>
-                    <td class="text-center">—</td>
-                </tr>
-                <tr>
-                    <td><input class="form-control" type="text" name="categories[2].name"
-                               value="Заощадження" aria-label="Категорія: заощадження"></td>
-                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[2].limit"
-                               aria-label="Обмеження: заощадження"></td>
-                    <td><input class="form-control" type="number" min="1" step="1" name="categories[2].priority"
-                               aria-label="Пріоритет: заощадження"></td>
-                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[2].desired"
-                               aria-label="Бажано: заощадження"></td>
-                    <td class="text-center">—</td>
-                    <td class="text-center">—</td>
-                    <td class="text-center">—</td>
-                </tr>
-                <tr>
-                    <td><input class="form-control" type="text" name="categories[3].name"
-                               value="Різне" aria-label="Категорія: різне"></td>
-                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[3].limit"
-                               aria-label="Обмеження: різне"></td>
-                    <td><input class="form-control" type="number" min="1" step="1" name="categories[3].priority"
-                               aria-label="Пріоритет: різне"></td>
-                    <td><input class="form-control" type="number" min="0" step="0.01" name="categories[3].desired"
-                               aria-label="Бажано: різне"></td>
-                    <td class="text-center">—</td>
-                    <td class="text-center">—</td>
-                    <td class="text-center">—</td>
+                <tbody id="optimization-categories">
+                <tr th:each="category, stat : *{categories}">
+                    <td><input class="form-control" type="text" required
+                               th:field="*{categories[__${stat.index}__].name}"
+                               aria-label="Категорія"></td>
+                    <td><input class="form-control" type="number" min="0" step="1"
+                               th:field="*{categories[__${stat.index}__].limit}"
+                               aria-label="Обмеження"></td>
+                    <td><input class="form-control" type="number" min="1" max="5" step="1" required
+                               th:field="*{categories[__${stat.index}__].priority}"
+                               aria-label="Пріоритет"></td>
+                    <td><input class="form-control" type="number" min="0" step="1"
+                               th:field="*{categories[__${stat.index}__].desired}"
+                               aria-label="Бажано"></td>
+                    <td><input class="form-control" type="number" step="1"
+                               th:field="*{categories[__${stat.index}__].optimal}"
+                               placeholder="—" aria-label="Оптимально"></td>
+                    <td><input class="form-control" type="text"
+                               th:field="*{categories[__${stat.index}__].result}"
+                               placeholder="—" aria-label="Результат"></td>
+                    <td><input class="form-control" type="number" step="1"
+                               th:field="*{categories[__${stat.index}__].deviation}"
+                               placeholder="—" aria-label="Відхилення"></td>
+                    <td class="text-center"><button class="btn btn-danger delete-optimization-category"
+                                                    type="button" aria-label="Видалити категорію">Видалити</button></td>
                 </tr>
                 </tbody>
                 <tfoot class="table-light">
                 <tr>
                     <th scope="row">Разом</th>
-                    <td class="text-center">—</td>
+                    <td class="text-center optimization-total" data-total-for="limit">—</td>
                     <td></td>
+                    <td class="text-center optimization-total" data-total-for="desired">—</td>
+                    <td><input class="form-control" type="number" step="1"
+                               th:field="*{totalOptimal}" placeholder="—" aria-label="Оптимально: разом"></td>
                     <td class="text-center">—</td>
-                    <td class="text-center">—</td>
-                    <td class="text-center">—</td>
+                    <td><input class="form-control" type="number" step="1"
+                               th:field="*{totalDeviation}" placeholder="—" aria-label="Відхилення: разом"></td>
                     <td class="text-center">—</td>
                 </tr>
                 </tfoot>
             </table>
         </div>
+        <button class="btn btn-success align-self-start" id="add-optimization-category" type="button">
+            Додати категорію
+        </button>
+        <button class="btn btn-primary align-self-start" type="submit">Зберегти</button>
+        </form>
     </main>
 </div>
+<script th:src="@{/js/optimization.js}"></script>
 </body>
 </html>
