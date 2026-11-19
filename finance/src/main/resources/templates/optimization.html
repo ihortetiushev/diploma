@@ -27,6 +27,24 @@
         <div class="alert alert-success" role="status" th:if="${saved}">Дані збережено.</div>
         <div class="alert alert-danger" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
         <form method="post" th:action="@{/optimization}" th:object="${settings}">
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label" for="income">Доходи</label>
+                <input class="form-control" type="number" min="0" step="1000"
+                       th:field="*{income}" id="income" aria-label="Доходи">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="mandatoryExpenses">Обов’язкові витрати</label>
+                <input class="form-control" type="number" min="0" step="1000"
+                       th:field="*{mandatoryExpenses}" id="mandatoryExpenses"
+                       aria-label="Обов’язкові витрати">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="availableFunds">Доступні кошти</label>
+                <input class="form-control" type="text" id="availableFunds"
+                       th:value="*{availableFunds}" placeholder="—" readonly>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
@@ -57,13 +75,13 @@
                                aria-label="Бажано"></td>
                     <td><input class="form-control" type="number" step="1"
                                th:field="*{categories[__${stat.index}__].optimal}"
-                               placeholder="—" aria-label="Оптимально"></td>
-                    <td><input class="form-control" type="text"
+                               placeholder="—" aria-label="Оптимально" readonly></td>
+                    <td><input class="form-control" type="text" readonly
                                th:field="*{categories[__${stat.index}__].result}"
                                placeholder="—" aria-label="Результат"></td>
                     <td><input class="form-control" type="number" step="1"
                                th:field="*{categories[__${stat.index}__].deviation}"
-                               placeholder="—" aria-label="Відхилення"></td>
+                               placeholder="—" aria-label="Відхилення" readonly></td>
                     <td class="text-center"><button class="btn btn-danger delete-optimization-category"
                                                     type="button" aria-label="Видалити категорію">Видалити</button></td>
                 </tr>
@@ -75,10 +93,12 @@
                     <td></td>
                     <td class="text-center optimization-total" data-total-for="desired">—</td>
                     <td><input class="form-control" type="number" step="1"
-                               th:field="*{totalOptimal}" placeholder="—" aria-label="Оптимально: разом"></td>
+                               th:field="*{totalOptimal}" placeholder="—"
+                               aria-label="Оптимально: разом" readonly></td>
                     <td class="text-center">—</td>
                     <td><input class="form-control" type="number" step="1"
-                               th:field="*{totalDeviation}" placeholder="—" aria-label="Відхилення: разом"></td>
+                               th:field="*{totalDeviation}" placeholder="—"
+                               aria-label="Відхилення: разом" readonly></td>
                     <td class="text-center">—</td>
                 </tr>
                 </tfoot>

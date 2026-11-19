@@ -23,4 +23,10 @@ public class OptimizationTotals {
 
     @Column(precision = 19, scale = 2)
     private BigDecimal deviation;
+
+    @Column(precision = 19, scale = 2)
+    private BigDecimal income;
+
+    @Column(name = "mandatory_expenses", precision = 19, scale = 2)
+    private BigDecimal mandatoryExpenses;
 }

@@ -20,6 +20,8 @@ import ua.nure.finance.repository.OptimizationCategoryRepository;
 import ua.nure.finance.repository.OptimizationTotalsRepository;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +52,10 @@ public class OptimizationController {
         totalsRepository.findById(1L).ifPresent(totals -> {
             settings.setTotalOptimal(totals.getOptimal());
             settings.setTotalDeviation(totals.getDeviation());
+            settings.setIncome(totals.getIncome());
+            settings.setMandatoryExpenses(totals.getMandatoryExpenses());
         });
+        calculateOptimal(settings, settings.getAvailableFunds());
         model.addAttribute("settings", settings);
         model.addAttribute("saved", saved != null);
         return "optimization";
@@ -64,6 +69,8 @@ public class OptimizationController {
             model.addAttribute("errorMessage", "Перевірте назви категорій і числові значення.");
             return "optimization";
         }
+
+        calculateOptimal(settings, settings.getAvailableFunds());
 
         List<OptimizationCategory> categories = new ArrayList<>();
         for (int index = 0; index < settings.getCategories().size(); index++) {
@@ -86,8 +93,115 @@ public class OptimizationController {
         totals.setId(1L);
         totals.setOptimal(settings.getTotalOptimal());
         totals.setDeviation(settings.getTotalDeviation());
+        totals.setIncome(settings.getIncome());
+        totals.setMandatoryExpenses(settings.getMandatoryExpenses());
         totalsRepository.save(totals);
         return "redirect:/optimization?saved";
+    }
+
+    private void calculateOptimal(OptimizationSettingsForm settings, BigDecimal availableFunds) {
+        List<OptimizationCategoryForm> categories = settings.getCategories();
+        if (availableFunds == null) {
+            categories.forEach(category -> {
+                category.setOptimal(null);
+                category.setDeviation(null);
+                category.setResult(null);
+            });
+            settings.setTotalOptimal(null);
+            settings.setTotalDeviation(null);
+            return;
+        }
+
+        List<BigInteger> desiredCents = categories.stream()
+                .map(category -> toCents(category.getDesired()))
+                .toList();
+        List<BigInteger> optimalCents = new ArrayList<>(desiredCents);
+        BigInteger totalDesiredCents = desiredCents.stream().reduce(BigInteger.ZERO, BigInteger::add);
+        BigInteger availableCents = toCents(availableFunds).max(BigInteger.ZERO);
+        BigInteger remainingReduction = totalDesiredCents.subtract(availableCents).max(BigInteger.ZERO);
+        List<Integer> activeIndexes = new ArrayList<>();
+        for (int index = 0; index < desiredCents.size(); index++) {
+            if (desiredCents.get(index).signum() > 0) {
+                activeIndexes.add(index);
+            }
+        }
+
+        while (remainingReduction.signum() > 0 && !activeIndexes.isEmpty()) {
+            BigInteger totalWeight = activeIndexes.stream()
+                    .map(index -> priorityWeight(categories.get(index).getPriority()))
+                    .reduce(BigInteger.ZERO, BigInteger::add);
+            List<Integer> cappedIndexes = new ArrayList<>();
+            for (int index : activeIndexes) {
+                BigInteger weight = priorityWeight(categories.get(index).getPriority());
+                if (remainingReduction.multiply(weight)
+                        .compareTo(desiredCents.get(index).multiply(totalWeight)) >= 0) {
+                    cappedIndexes.add(index);
+                }
+            }
+
+            if (cappedIndexes.isEmpty()) {
+                List<ReductionShare> shares = new ArrayList<>();
+                BigInteger allocatedCents = BigInteger.ZERO;
+                for (int index : activeIndexes) {
+                    BigInteger[] quotientAndRemainder = remainingReduction
+                            .multiply(priorityWeight(categories.get(index).getPriority()))
+                            .divideAndRemainder(totalWeight);
+                    shares.add(new ReductionShare(index, quotientAndRemainder[0], quotientAndRemainder[1]));
+                    allocatedCents = allocatedCents.add(quotientAndRemainder[0]);
+                }
+
+                int extraCents = remainingReduction.subtract(allocatedCents).intValueExact();
+                shares.sort((left, right) -> right.remainder().compareTo(left.remainder()));
+                for (int index = 0; index < shares.size(); index++) {
+                    ReductionShare share = shares.get(index);
+                    BigInteger reduction = share.cents().add(index < extraCents ? BigInteger.ONE : BigInteger.ZERO);
+                    optimalCents.set(share.categoryIndex(), desiredCents.get(share.categoryIndex()).subtract(reduction));
+                }
+                remainingReduction = BigInteger.ZERO;
+            } else {
+                for (int index : cappedIndexes) {
+                    optimalCents.set(index, BigInteger.ZERO);
+                    remainingReduction = remainingReduction.subtract(desiredCents.get(index));
+                }
+                activeIndexes.removeAll(cappedIndexes);
+            }
+        }
+
+        BigInteger totalOptimalCents = BigInteger.ZERO;
+        BigInteger totalDeviationCents = BigInteger.ZERO;
+        for (int index = 0; index < categories.size(); index++) {
+            BigDecimal desired = categories.get(index).getDesired();
+            BigInteger optimal = optimalCents.get(index);
+            categories.get(index).setOptimal(desired == null ? null : fromCents(optimal));
+            totalOptimalCents = totalOptimalCents.add(optimal);
+            BigInteger deviation = desired == null ? BigInteger.ZERO : desiredCents.get(index).subtract(optimal);
+            categories.get(index).setDeviation(desired == null ? null : fromCents(deviation));
+            categories.get(index).setResult(desired == null ? null : resultForDeviation(deviation.signum()));
+            totalDeviationCents = totalDeviationCents.add(deviation);
+        }
+        settings.setTotalOptimal(fromCents(totalOptimalCents));
+        settings.setTotalDeviation(fromCents(totalDeviationCents));
+    }
+
+    private BigInteger toCents(BigDecimal value) {
+        return value == null
+                ? BigInteger.ZERO
+                : value.setScale(2, RoundingMode.HALF_UP).movePointRight(2).toBigIntegerExact();
+    }
+
+    private BigDecimal fromCents(BigInteger value) {
+        return new BigDecimal(value, 2);
+    }
+
+    private BigInteger priorityWeight(Integer priority) {
+        return BigInteger.valueOf(60L / priority);
+    }
+
+    private String resultForDeviation(int deviationSign) {
+        return deviationSign < 0 ? "Не викон." : "Викон.";
+    }
+
+    private record ReductionShare(int categoryIndex, BigInteger cents, BigInteger remainder) {
     }
 
     private OptimizationCategory newCategory(String name) {
@@ -102,6 +216,10 @@ public class OptimizationController {
         private List<OptimizationCategoryForm> categories = new ArrayList<>();
         private BigDecimal totalOptimal;
         private BigDecimal totalDeviation;
+        @DecimalMin("0")
+        private BigDecimal income;
+        @DecimalMin("0")
+        private BigDecimal mandatoryExpenses;
 
         public OptimizationSettingsForm() {
         }
@@ -132,6 +250,29 @@ public class OptimizationController {
 
         public void setTotalDeviation(BigDecimal totalDeviation) {
             this.totalDeviation = totalDeviation;
+        }
+
+        public BigDecimal getIncome() {
+            return income;
+        }
+
+        public void setIncome(BigDecimal income) {
+            this.income = income;
+        }
+
+        public BigDecimal getMandatoryExpenses() {
+            return mandatoryExpenses;
+        }
+
+        public void setMandatoryExpenses(BigDecimal mandatoryExpenses) {
+            this.mandatoryExpenses = mandatoryExpenses;
+        }
+
+        public BigDecimal getAvailableFunds() {
+            if (income == null || mandatoryExpenses == null) {
+                return null;
+            }
+            return income.subtract(mandatoryExpenses);
         }
     }
 
