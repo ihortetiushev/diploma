@@ -1,6 +1,8 @@
 spring:
   application:
     name: finance
+  config:
+    import: optional:file:.env[.properties]
 
   flyway: #flyway automatically uses the datasource from the application to connect to the DB
     enabled: true # enables flyway database migration
@@ -23,5 +25,5 @@ spring:
 finance:
   ai:
     base-url: ${AI_API_BASE_URL:https://generativelanguage.googleapis.com/v1beta/openai}
-    api-key: ${AI_API_KEY:AIzaSyDTZtjeyHXOO6E5_eBnxwkFC0BcllcgGjE}
+    api-key: ${AI_API_KEY:}
     model: ${AI_MODEL:gemini-3.5-flash-lite}
