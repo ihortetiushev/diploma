@@ -18,13 +18,14 @@
                 <li><a href="/assets">Активи</a></li>
                 <li><a href="/transactions">Журнал транзакцій</a></li>
                 <li><a href="/forecast">Прогноз</a></li>
-                <li><a href="/planning" class="active">Планування бюджету</a></li>
                 <li><a href="/optimization">Оптимізація</a></li>
+                <li><a href="/planning" class="active">Планування бюджету</a></li>
             </ul>
         </nav>
     </aside>
     <main class="dashboard-content">
-        <h1>Доходи та витрати за період</h1>
+        <h1>Рекомендації</h1>
+        <h2 class="h5 mb-5">Вибірка доходів і витрат за період</h2>
         <form class="row g-3 align-items-end mb-3" method="get" th:action="@{/planning}">
             <div class="col-auto">
                 <label class="form-label" for="periodFrom">Початок періоду</label>
@@ -36,18 +37,27 @@
                 <input class="form-control" type="date" id="periodTo" name="to"
                        required th:value="${periodTo}">
             </div>
+            <div class="col-auto ms-5">
+                <label class="form-label" for="selectedMonth">Місяць для аналізу</label>
+                <select class="form-select" id="selectedMonth" name="month">
+                    <option value="" th:selected="${selectedMonth == ''}">Усі місяці періоду</option>
+                    <option th:each="month : ${monthOptions}" th:value="${month.monthValue}"
+                            th:text="${month.month}" th:selected="${month.monthValue == selectedMonth}"></option>
+                </select>
+            </div>
             <div class="col-auto">
-                <button class="btn btn-outline-primary" type="submit">Показати з бази</button>
+                <button class="btn btn-outline-primary" type="submit">Обрати період</button>
             </div>
         </form>
+        <p class="form-text">Якщо за вибраний місяць немає доходів чи витрат, відображаються всі дані періоду.</p>
         <div class="alert alert-danger" role="alert" th:if="${periodError}" th:text="${periodError}"></div>
         <div class="table-responsive" th:unless="${periodError}">
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Місяць</th>
-                    <th scope="col">Доходи з бази</th>
-                    <th scope="col">Витрати з бази</th>
+                    <th scope="col">Доходи</th>
+                    <th scope="col">Витрати</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -69,18 +79,13 @@
         <form class="mt-4" method="post" th:action="@{/planning/ai}">
             <input type="hidden" name="from" th:value="${periodFrom}">
             <input type="hidden" name="to" th:value="${periodTo}">
-            <div class="mb-3">
-                <label class="form-label" for="prompt">Запит до ШІ</label>
-                <textarea class="form-control" id="prompt" name="prompt" rows="4" maxlength="4000"
-                          required placeholder="Наприклад: проаналізуй витрати та запропонуй, як їх оптимізувати."
-                          th:text="${prompt}"></textarea>
-                <div class="form-text">Для аналізу до ШІ передаються лише місячні підсумки доходів і витрат за вибраний період.</div>
-            </div>
+            <input type="hidden" name="month" th:value="${selectedMonth}">
+            <p class="form-text">Аналіз враховує вибраний період і місяць.</p>
             <button class="btn btn-primary" type="submit">Отримати аналіз</button>
         </form>
         <div class="alert alert-danger mt-3" role="alert" th:if="${aiError}" th:text="${aiError}"></div>
         <section class="mt-4" aria-live="polite" th:if="${aiResultHtml}">
-            <h2>Відповідь ШІ</h2>
+            <h2>Результат</h2>
             <div class="border rounded p-3 ai-response" th:utext="${aiResultHtml}"></div>
         </section>
     </main>

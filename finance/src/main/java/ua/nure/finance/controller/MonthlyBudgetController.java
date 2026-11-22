@@ -55,37 +55,39 @@ public class MonthlyBudgetController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam(required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(required = false) String month,
             Model model) {
         LocalDate periodStart = from == null ? LocalDate.now().withDayOfYear(1) : from;
         LocalDate periodEnd = to == null ? LocalDate.now() : to;
         model.addAttribute("periodFrom", periodStart);
         model.addAttribute("periodTo", periodEnd);
+        model.addAttribute("selectedMonth", month == null ? "" : month);
         addPeriodData(model, loadPeriod(periodStart, periodEnd));
         return "planning";
     }
 
     @PostMapping("/planning/ai")
     public String analyzePeriod(
-            @RequestParam String prompt,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(required = false) String month,
             Model model) {
         model.addAttribute("periodFrom", from);
         model.addAttribute("periodTo", to);
-        model.addAttribute("prompt", prompt);
+        model.addAttribute("selectedMonth", month == null ? "" : month);
 
         PeriodReport report = loadPeriod(from, to);
         addPeriodData(model, report);
         if (report.error() != null) {
             model.addAttribute("periodError", report.error());
-        } else if (prompt.isBlank() || prompt.length() > 4000) {
-            model.addAttribute("aiError", "Введіть запит довжиною до 4000 символів.");
         } else {
             try {
                 List<MonthlySummary> summaries = report.months().stream()
-                        .map(month -> new MonthlySummary(month.getMonth(), month.getIncome(), month.getExpenses()))
+                        .map(monthSummary -> new MonthlySummary(monthSummary.getMonth(),
+                                monthSummary.getIncome(), monthSummary.getExpenses()))
                         .toList();
-                String aiResult = aiAnalysisService.analyze(prompt, from, to, summaries,
+                MonthlySummary selectedMonthSummary = findSelectedMonth(report, month);
+                String aiResult = aiAnalysisService.analyze(from, to, summaries, selectedMonthSummary,
                         report.totalIncome(), report.totalExpenses());
                 model.addAttribute("aiResultHtml", markdownRenderer.render(markdownParser.parse(aiResult)));
             } catch (AiAnalysisException exception) {
@@ -97,7 +99,7 @@ public class MonthlyBudgetController {
 
     private PeriodReport loadPeriod(LocalDate periodStart, LocalDate periodEnd) {
         if (periodStart.isAfter(periodEnd)) {
-            return new PeriodReport(List.of(), BigDecimal.ZERO, BigDecimal.ZERO,
+            return new PeriodReport(List.of(), List.of(), BigDecimal.ZERO, BigDecimal.ZERO,
                     "Дата початку не може бути пізніше дати завершення.");
         }
 
@@ -115,15 +117,29 @@ public class MonthlyBudgetController {
         for (YearMonth month = firstMonth; !month.isAfter(lastMonth); month = month.plusMonths(1)) {
             BigDecimal income = incomeByMonth.getOrDefault(month, BigDecimal.ZERO);
             BigDecimal expenses = expensesByMonth.getOrDefault(month, BigDecimal.ZERO);
-            months.add(new PeriodMonth(month.format(monthFormatter), income, expenses));
+            months.add(new PeriodMonth(month.toString(), month.format(monthFormatter), income, expenses));
             totalIncome = totalIncome.add(income);
             totalExpenses = totalExpenses.add(expenses);
         }
 
-        return new PeriodReport(months, totalIncome, totalExpenses, null);
+        return new PeriodReport(months, months, totalIncome, totalExpenses, null);
+    }
+
+    private MonthlySummary findSelectedMonth(PeriodReport report, String selectedMonth) {
+        if (selectedMonth == null || selectedMonth.isBlank()) {
+            return null;
+        }
+
+        return report.availableMonths().stream()
+                .filter(month -> month.getMonthValue().equals(selectedMonth))
+                .filter(month -> month.getIncome().signum() != 0 || month.getExpenses().signum() != 0)
+                .findFirst()
+                .map(month -> new MonthlySummary(month.getMonth(), month.getIncome(), month.getExpenses()))
+                .orElse(null);
     }
 
     private void addPeriodData(Model model, PeriodReport report) {
+        model.addAttribute("monthOptions", report.availableMonths());
         model.addAttribute("actualMonths", report.months());
         model.addAttribute("actualPeriodIncome", report.totalIncome());
         model.addAttribute("actualPeriodExpenses", report.totalExpenses());
@@ -142,14 +158,20 @@ public class MonthlyBudgetController {
     }
 
     public static class PeriodMonth {
+        private final String monthValue;
         private final String month;
         private final BigDecimal income;
         private final BigDecimal expenses;
 
-        public PeriodMonth(String month, BigDecimal income, BigDecimal expenses) {
+        public PeriodMonth(String monthValue, String month, BigDecimal income, BigDecimal expenses) {
+            this.monthValue = monthValue;
             this.month = month;
             this.income = income;
             this.expenses = expenses;
+        }
+
+        public String getMonthValue() {
+            return monthValue;
         }
 
         public String getMonth() {
@@ -165,7 +187,7 @@ public class MonthlyBudgetController {
         }
     }
 
-    private record PeriodReport(List<PeriodMonth> months, BigDecimal totalIncome,
+    private record PeriodReport(List<PeriodMonth> availableMonths, List<PeriodMonth> months, BigDecimal totalIncome,
                                 BigDecimal totalExpenses, String error) {
     }
 }
