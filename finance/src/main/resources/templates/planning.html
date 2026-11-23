@@ -20,6 +20,7 @@
                 <li><a href="/forecast">Прогноз</a></li>
                 <li><a href="/optimization">Оптимізація</a></li>
                 <li><a href="/planning" class="active">Планування бюджету</a></li>
+                <li><a href="/assistant">Помічник</a></li>
             </ul>
         </nav>
     </aside>
@@ -84,12 +85,67 @@
             <button class="btn btn-primary" type="submit">Отримати аналіз</button>
         </form>
         <div class="alert alert-danger mt-3" role="alert" th:if="${aiError}" th:text="${aiError}"></div>
-        <section class="mt-4" aria-live="polite" th:if="${aiResultHtml}">
+        <section class="mt-4" id="planningAiResult" aria-live="polite"
+                 th:style="${aiResultHtml == null} ? 'display: none' : ''">
             <h2>Результат</h2>
             <div class="border rounded p-3 ai-response" th:utext="${aiResultHtml}"></div>
         </section>
     </main>
 </div>
+<script>
+    const planningStorageKey = 'planningAiResult';
+    const pageNavigation = performance.getEntriesByType('navigation')[0]?.type;
+    if (pageNavigation === 'reload') {
+        sessionStorage.removeItem(planningStorageKey);
+    }
+
+    const planningForm = document.querySelector('form[action$="/planning"][method="get"]');
+    const fromInput = document.getElementById('periodFrom');
+    const toInput = document.getElementById('periodTo');
+    const monthInput = document.getElementById('selectedMonth');
+    const resultSection = document.getElementById('planningAiResult');
+    const resultContent = resultSection.querySelector('.ai-response');
+    const currentPeriod = () => ({
+        from: fromInput.value,
+        to: toInput.value,
+        month: monthInput.value
+    });
+
+    let savedPlanning;
+    try {
+        savedPlanning = JSON.parse(sessionStorage.getItem(planningStorageKey));
+    } catch (error) {
+        sessionStorage.removeItem(planningStorageKey);
+    }
+
+    if (pageNavigation !== 'reload' && savedPlanning && window.location.pathname === '/planning') {
+        const current = currentPeriod();
+        const matchesSavedPeriod = current.from === savedPlanning.from
+            && current.to === savedPlanning.to
+            && current.month === savedPlanning.month;
+
+        if (!window.location.search && !matchesSavedPeriod) {
+            const params = new URLSearchParams({
+                from: savedPlanning.from,
+                to: savedPlanning.to,
+                month: savedPlanning.month
+            });
+            window.location.replace(`${planningForm.action}?${params.toString()}`);
+        } else if (matchesSavedPeriod && savedPlanning.html) {
+            resultContent.innerHTML = savedPlanning.html;
+            resultSection.style.display = '';
+        } else if (window.location.search && !matchesSavedPeriod) {
+            sessionStorage.removeItem(planningStorageKey);
+        }
+    }
+
+    if (window.location.pathname === '/planning/ai' && resultContent.innerHTML.trim()) {
+        sessionStorage.setItem(planningStorageKey, JSON.stringify({
+            ...currentPeriod(),
+            html: resultContent.innerHTML
+        }));
+    }
+</script>
 <style>
     .ai-response h1,
     .ai-response h2,
