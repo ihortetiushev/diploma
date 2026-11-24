@@ -22,7 +22,7 @@ public class AiAnalysisService {
     private static final Logger logger = LoggerFactory.getLogger(AiAnalysisService.class);
     private static final String ANALYSIS_INSTRUCTIONS = """
             Розв'яжи українською задачу оцінювання персональних фінансів на основі лише наданих
-                                   агрегованих місячних доходів і витрат. Поверни повний звіт у коректному Markdown.
+                                   агрегованих місячних доходів і витрат.
             
                                    РОЗРАХУНКИ ЗА ВСІМ ВИБРАНИМ ПЕРІОДОМ:
                                    1. Для кожного місяця, включно з місяцями з нульовими значеннями, порахуй:
